@@ -62,6 +62,12 @@ public class Unchained {
 		ArrayList<String> combined = new ArrayList<>();
 		combined.addAll(fsResults);
 		combined.addAll(yelpResults);
+
+		//remove any duplicates
+		Set setItems = new LinkedHashSet(combined);
+		combined.clear();
+		combined.addAll(setItems);
+		
 		return combined;
 	}
 	
@@ -114,14 +120,12 @@ public class Unchained {
 			System.out.println("  type: " + fsResult.getMeta().getErrorType());
 			System.out.println("  detail: " + fsResult.getMeta().getErrorDetail()); 
 		}
-		Set setItems = new LinkedHashSet(result);
-		result.clear();
-		result.addAll(setItems);
+		
 		return result;
 	}
 	
 	public static ArrayList<String> getYelpResults(String ll) {
 		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
-		return yelpApi.queryAPI(yelpApi);
+		return yelpApi.queryAPI(yelpApi, ll);
 	}
 }

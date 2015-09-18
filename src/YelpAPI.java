@@ -25,20 +25,10 @@ import org.scribe.oauth.OAuthService;
 public class YelpAPI {
 
 	private static final String API_HOST = "api.yelp.com";
-	private static final String DEFAULT_TERM = "dinner";
-	private static final String DEFAULT_LOCATION = "Atlanta, GA";
-	private static final int SEARCH_LIMIT = 20;
+	private static final int SEARCH_LIMIT = 20; //MAX
 	private static final String SEARCH_PATH = "/v2/search";
 	private static final String BUSINESS_PATH = "/v2/business";
 
-	/*
-	 * Update OAuth credentials below from the Yelp Developers API site:
-	 * http://www.yelp.com/developers/getting_started/api_access
-	 */
-	private static final String CONSUMER_KEY = "1y6Y9ZQBDOctIKrq5NO7XQ";
-	private static final String CONSUMER_SECRET = "852Nfvhn9yd7GnXoOyNsygmT2Ks";
-	private static final String TOKEN = "OHVBilTnx0nmS8_fVQxMJ6s41fcLoZA9";
-	private static final String TOKEN_SECRET = "3bjEG5GcVc-3vJ6UQIt1bgrGD2o";
 
 	OAuthService service;
 	Token accessToken;
@@ -72,6 +62,13 @@ public class YelpAPI {
 		OAuthRequest request = createOAuthRequest(SEARCH_PATH);
 		request.addQuerystringParameter("term", term);
 		request.addQuerystringParameter("location", location);
+		request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+		return sendRequestAndGetResponse(request);
+	}
+	public String searchForBusinessesByLL(String term, String ll) {
+		OAuthRequest request = createOAuthRequest(SEARCH_PATH);
+		request.addQuerystringParameter("term", term);
+        request.addQuerystringParameter("ll", ll);
 		request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
 		return sendRequestAndGetResponse(request);
 	}
@@ -121,10 +118,10 @@ public class YelpAPI {
 	 * @param yelpApi <tt>YelpAPI</tt> service instance
 	 * @param yelpApiCli <tt>YelpAPICLI</tt> command line arguments
 	 */
-	public ArrayList<String> queryAPI(YelpAPI yelpApi) {
+	public ArrayList<String> queryAPI(YelpAPI yelpApi, String ll) {
 		ArrayList<String> list = new ArrayList<>();
 		String searchResponseJSON =
-				yelpApi.searchForBusinessesByLocation("restaurants", "Atlanta, GA");
+				yelpApi.searchForBusinessesByLL("restaurants", "33.890917,-84.030136");
 //		System.out.println(searchResponseJSON);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
