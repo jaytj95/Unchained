@@ -40,7 +40,8 @@ public class Unchained {
 					for(String v : nonChains) {
 						System.out.println(v);
 					}
-					System.out.println("We found " + nonChains.size() + " non-chains");
+					System.out.println("\nWe found " + nonChains.size() + " non-chains");
+					System.out.println("\n\nBrought to you by Foursquare and Yelp!");
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -55,27 +56,13 @@ public class Unchained {
 
 
 	public static ArrayList<String> getVenues(String ll) throws FoursquareApiException {
-		ArrayList<String> result = new ArrayList<>();
-		FoursquareApi foursquareApi = new FoursquareApi(FOURSQUARE_ID, FOURDQUARE_SECRET, "www.google.com");
-		foursquareApi.setVersion("20150917");
-		// After client has been initialized we can make queries.
-		Result<VenuesSearchResult> fsResult = foursquareApi.venuesSearch(ll, null, null, null, null, 100, null, FOURSQUARE_CATEGORY_RESTAURANTS, null, null, null, 20000, null);
-
-		if (fsResult.getMeta().getCode() == 200) {
-			for(CompactVenue v: fsResult.getResult().getVenues()) {
-				result.add(v.getName());
-			}
-		} else {
-			// TODO: Proper error handling
-			System.out.println("Error occured: ");
-			System.out.println("  code: " + fsResult.getMeta().getCode());
-			System.out.println("  type: " + fsResult.getMeta().getErrorType());
-			System.out.println("  detail: " + fsResult.getMeta().getErrorDetail()); 
-		}
-		Set setItems = new LinkedHashSet(result);
-		result.clear();
-		result.addAll(setItems);
-		return result;
+		ArrayList<String> fsResults = get4SQVenues(ll);
+		ArrayList<String> yelpResults = getYelpResults(ll);
+		
+		ArrayList<String> combined = new ArrayList<>();
+		combined.addAll(fsResults);
+		combined.addAll(yelpResults);
+		return combined;
 	}
 	
 	public static ArrayList<String> loadChainRestaurants() throws FileNotFoundException {
@@ -104,5 +91,37 @@ public class Unchained {
 			if(!isChain) nonChains.add(venue);
 		}
 		return nonChains;
+	}
+	
+	
+	
+	/* VENUES */
+	public static ArrayList<String> get4SQVenues(String ll) throws FoursquareApiException {
+		ArrayList<String> result = new ArrayList<>();
+		FoursquareApi foursquareApi = new FoursquareApi(FOURSQUARE_ID, FOURDQUARE_SECRET, "www.google.com");
+		foursquareApi.setVersion("20150917");
+		// After client has been initialized we can make queries.
+		Result<VenuesSearchResult> fsResult = foursquareApi.venuesSearch(ll, null, null, null, null, 100, null, FOURSQUARE_CATEGORY_RESTAURANTS, null, null, null, 24141, null);
+
+		if (fsResult.getMeta().getCode() == 200) {
+			for(CompactVenue v: fsResult.getResult().getVenues()) {
+				result.add(v.getName());
+			}
+		} else {
+			// TODO: Proper error handling
+			System.out.println("Error occured: ");
+			System.out.println("  code: " + fsResult.getMeta().getCode());
+			System.out.println("  type: " + fsResult.getMeta().getErrorType());
+			System.out.println("  detail: " + fsResult.getMeta().getErrorDetail()); 
+		}
+		Set setItems = new LinkedHashSet(result);
+		result.clear();
+		result.addAll(setItems);
+		return result;
+	}
+	
+	public static ArrayList<String> getYelpResults(String ll) {
+		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
+		return yelpApi.queryAPI(yelpApi);
 	}
 }

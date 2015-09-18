@@ -29,6 +29,7 @@ Bob Evans Restaurants
 Bojangles' Famous Chicken 'n Biscuits
 Bonefish Grill
 Boston Market
+Whole Food
 Braum's
 Bravo Brio Restaurant GroupBrio
 Bubba Gump Shrimp Company
@@ -64,7 +65,7 @@ Chester Fried Chicken
 Chevys Fresh Mex
 Chick-fil-A
 Chicken Express
-Chicken In The Rough
+Chicken In Rough
 ChickfilA
 Chili's
 Chili's Grill & Bar
@@ -102,12 +103,13 @@ Eat'n Park
 EatZi's
 Eegee's
 Einstein Bros. Bagels
-El Chico (restaurant)El Chico
+El Chico
 El Pollo Loco
 El Taco Tote
 Elephant Bar
 FATZ
 Famous Dave's
+Farmer
 Farmer Boys
 Fatburger
 Fazoli's
@@ -147,7 +149,7 @@ Hyatt Hotels
 IHOP
 In-N-Out Burger
 InNOut Burger
-Jack in the Box
+Jack in Box
 Jack's
 Jamba Juice
 Jason's Deli
@@ -165,7 +167,6 @@ Krispy Kreme
 Krispy Kreme Doughnuts
 Kroger
 Krystal
-Krystal (restaurant)Krystal
 L&L Hawaiian Barbecue
 Landry's Restaurants
 Ledo Pizza
@@ -198,7 +199,7 @@ Naugles
 Noodles & Company
 O'Charley's
 Olive Garden
-On the Border Mexican Grill & Cantina
+On Border Mexican Grill & Cantina
 Outback Steakhouse
 Ovation BrandsCountry Buffet
 Ovation BrandsOld Country Buffet
@@ -211,7 +212,7 @@ Papa John's Pizza
 Papa Murphy's Take 'N' Bake Pizza
 Papa Murphy'sPapa Murphy's Take 'N' Bake Pizza
 Pei Wei Asian Diner
-Penn Station (restaurant)Penn Station East Coast Subs
+Penn Station
 Perkins Restaurant and Bakery
 Pita Pit
 Pizza Hut
@@ -232,26 +233,25 @@ Quiznos Sub
 RA Sushi
 Rainforest Cafe
 Raising Cane's Chicken Fingers
-Rax (restaurant)Rax
+Rax
 Red Hot & Blue
 Red Lobster
 Red Robin
 Red Robin Gourmet Burgers & Spirits
 Redstone American Grill
 Robeks
-Rock Bottom (restaurant)Rock Bottom
+Rock Bottom
 Romano's Macaroni Grill
 Round Table Pizza
 Roy Rogers Restaurants
 Roy's
 Rubio's Fresh Mexican Grill
 Ruby Tuesday
-Ruby Tuesday (restaurant)Ruby Tuesday
-Runza (restaurant)Runza
+Runza
 Ruth's Chris Steak House
 Saladworks
 Sbarro
-Sbarro, The Italian Eatery
+Sbarro, Italian Eatery
 Schlotzsky's
 Seasons 52
 Seattle's Best Coffee
@@ -270,14 +270,14 @@ Sonic DriveIn
 Sonic, America's Drive-In
 SouplantationSouplantation and Sweet Tomatoes
 Spaghetti Warehouse
-Spangles (restaurant)Spangles
+Spangles
 St. Louis Bread Company
 Starbucks
 Starbucks Coffee
 Steak 'n Shake
 Steak n Shake
-Sticky Fingers (restaurant)Sticky Fingers
-Stir Crazy (restaurant)Stir Crazy
+Sticky Fingers
+Stir Crazy
 Sub Station II
 Subway
 Sweet Tomatoes
@@ -295,12 +295,12 @@ Taco Tico
 Taco Time
 Target Cafe (Target Stores)
 Texas Roadhouse
-The Capital Grille
-The Cheesecake Factory
-The Melting Pot (restaurant)The Melting Pot
-The Old Spaghetti Factory
-The Original Italian Pie
-The Original Pancake House
+Capital Grille
+Cheesecake Factory
+Melting Pot
+Old Spaghetti Factory
+Original Italian Pie
+Original Pancake House
 Tijuana Flats
 Tilted Kilt
 Tim Hortons
