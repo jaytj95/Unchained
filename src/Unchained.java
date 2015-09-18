@@ -22,7 +22,7 @@ public class Unchained {
 	public static final String YELP_TOKEN_SECRET = "3bjEG5GcVc-3vJ6UQIt1bgrGD2o";
 	
 	
-	public static final String LL = "33.890917,-84.030136";
+	public static final String DEAFULT_LL = "34.061982,-83.983360";
 	
 	public static void main(String[] args) {
 		Scanner keyboard = new Scanner(System.in);
@@ -35,7 +35,7 @@ public class Unchained {
 			public void run() {
 				try {
 					ArrayList<String> chains = loadChainRestaurants();
-					ArrayList<String> restaurantsAroundMe = getVenues(LL);
+					ArrayList<String> restaurantsAroundMe = getVenues(ll);
 					ArrayList<String> nonChains = curateRestaurants(restaurantsAroundMe, chains);
 					for(String v : nonChains) {
 						System.out.println(v);
@@ -106,7 +106,6 @@ public class Unchained {
 		ArrayList<String> result = new ArrayList<>();
 		FoursquareApi foursquareApi = new FoursquareApi(FOURSQUARE_ID, FOURDQUARE_SECRET, "www.google.com");
 		foursquareApi.setVersion("20150917");
-		// After client has been initialized we can make queries.
 		Result<VenuesSearchResult> fsResult = foursquareApi.venuesSearch(ll, null, null, null, null, 100, null, FOURSQUARE_CATEGORY_RESTAURANTS, null, null, null, 24141, null);
 
 		if (fsResult.getMeta().getCode() == 200) {

@@ -121,7 +121,7 @@ public class YelpAPI {
 	public ArrayList<String> queryAPI(YelpAPI yelpApi, String ll) {
 		ArrayList<String> list = new ArrayList<>();
 		String searchResponseJSON =
-				yelpApi.searchForBusinessesByLL("restaurants", "33.890917,-84.030136");
+				yelpApi.searchForBusinessesByLL("restaurants", ll);
 //		System.out.println(searchResponseJSON);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
