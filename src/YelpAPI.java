@@ -118,15 +118,15 @@ public class YelpAPI {
 	 * @param yelpApi <tt>YelpAPI</tt> service instance
 	 * @param yelpApiCli <tt>YelpAPICLI</tt> command line arguments
 	 */
-	public ArrayList<String> queryAPI(YelpAPI yelpApi, String ll) {
-		ArrayList<String> list = new ArrayList<>();
+	public ArrayList<UnchainedRestaurant> queryAPI(YelpAPI yelpApi, String ll) {
+		ArrayList<UnchainedRestaurant> list = new ArrayList<>();
 		String searchResponseJSON =
 				yelpApi.searchForBusinessesByLL("restaurants", ll);
-//		System.out.println(searchResponseJSON);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
 		try {
 			response = (JSONObject) parser.parse(searchResponseJSON);
+			System.out.println(response);
 		} catch (ParseException pe) {
 			System.out.println("Error: could not parse JSON response:");
 			System.out.println(searchResponseJSON);
@@ -137,7 +137,21 @@ public class YelpAPI {
 		for(int i = 0; i < businesses.size(); i++) {
 			JSONObject restaurant = (JSONObject) businesses.get(i);
 			String name = (String) restaurant.get("name");
-			list.add(name);
+			
+			JSONObject location = (JSONObject) restaurant.get("location");
+			JSONArray addrArray = (JSONArray) location.get("address");
+			String address = (String) addrArray.get(0);
+			address += ", " + (String) location.get("city");
+			address += ", " + (String) location.get("state_code");
+			address += ", " + (String) location.get("postal_code");
+			
+			
+			
+			String website = (String) restaurant.get("mobile_url");
+			double rating = (Double) restaurant.get("rating");
+			
+			UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating);
+			list.add(yelpRestaurant);
 		}
 		
 		return list;

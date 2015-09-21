@@ -1,46 +1,64 @@
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Scanner;
-import java.util.Set;
 
-import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.FoursquareApiException;
-import fi.foyt.foursquare.api.Result;
-import fi.foyt.foursquare.api.entities.CompactVenue;
-import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
 public class UnchainedTester {
-	public static final String DEAFULT_LL = "34.061982,-83.983360";
-	
+	public static final String DEAFULT_LL = "34.0619825,-83.9833599";
+
 	public static void main(String[] args) {
-		
+
 		//JAVA SAMPLE 
 		Scanner keyboard = new Scanner(System.in);
-		System.out.println("Enter lat,lng");
-		String ll = keyboard.next();
-		keyboard.close();
-		new Thread(new Runnable() {
-			
+		System.out.println("Enter lat,lng or maps query");
+		final String ll = keyboard.nextLine();
+		//		keyboard.close();
+
+		Thread thread = new Thread(new Runnable() {
+			String query = ll;
 			@Override
 			public void run() {
+				if(!query.matches("%f,%f")) { 
+					query = Util.getLatLngFromMapsQuery(query);
+				}
 				try {
-					ArrayList<String> nonChains = Unchained.getUnchainedRestaurants(ll);
-					for(String v : nonChains) {
-						System.out.println(v);
+					ArrayList<UnchainedRestaurant> nonChains = UnchainedAPI.getUnchainedRestaurants(query);
+					for(UnchainedRestaurant v : nonChains) {
+						System.out.println(nonChains.indexOf(v) + 1 + ". " + v.getName());
 					}
-					System.out.println("\nWe found " + nonChains.size() + " non-chains");
+					System.out.println("\nWe found " + nonChains.size() + " non-chains\n");
+
+					System.out.println("Enter the number of a non-chain you want to check out...-1 to exit");
+
+					int i;
+					while((i = keyboard.nextInt()) != -1) {
+						if(i > 1 && i <= nonChains.size()) {
+							UnchainedRestaurant ucr = nonChains.get(i-1);
+							System.out.println(ucr.toString());
+						}
+					}
+
+
+
 					System.out.println("Brought to you by Foursquare and Yelp!");
+					System.out.println("Stay Unchained ;) - Jason");
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
+					System.err.println("File Not Found Exception");
 					e.printStackTrace();
 				} catch (FoursquareApiException e) {
-					// TODO Auto-generated catch block
+					System.err.println("Foursquare API Exception");
 					e.printStackTrace();
 				}
-				
+
 			}
-		}).start();
+		});
+		thread.start();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
