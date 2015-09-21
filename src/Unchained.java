@@ -22,40 +22,14 @@ public class Unchained {
 	public static final String YELP_TOKEN_SECRET = "3bjEG5GcVc-3vJ6UQIt1bgrGD2o";
 	
 	
-	public static final String DEAFULT_LL = "34.061982,-83.983360";
-	
-	public static void main(String[] args) {
-		Scanner keyboard = new Scanner(System.in);
-		System.out.println("Enter lat,lng");
-		String ll = keyboard.next();
-		keyboard.close();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					ArrayList<String> chains = loadChainRestaurants();
-					ArrayList<String> restaurantsAroundMe = getVenues(ll);
-					ArrayList<String> nonChains = curateRestaurants(restaurantsAroundMe, chains);
-					for(String v : nonChains) {
-						System.out.println(v);
-					}
-					System.out.println("\nWe found " + nonChains.size() + " non-chains");
-					System.out.println("\n\nBrought to you by Foursquare and Yelp!");
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (FoursquareApiException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-		}).start();
+	public static ArrayList<String> getUnchainedRestaurants(String ll) throws FileNotFoundException, FoursquareApiException {
+		ArrayList<String> chains = loadChainRestaurantsList();
+		ArrayList<String> restaurantsAroundMe = getVenuesNearby(ll);
+		
+		return curateRestaurants(restaurantsAroundMe, chains);
 	}
-
-
-	public static ArrayList<String> getVenues(String ll) throws FoursquareApiException {
+	
+	private static ArrayList<String> getVenuesNearby(String ll) throws FoursquareApiException {
 		ArrayList<String> fsResults = get4SQVenues(ll);
 		ArrayList<String> yelpResults = getYelpResults(ll);
 		
@@ -71,7 +45,7 @@ public class Unchained {
 		return combined;
 	}
 	
-	public static ArrayList<String> loadChainRestaurants() throws FileNotFoundException {
+	private static ArrayList<String> loadChainRestaurantsList() throws FileNotFoundException {
 		Scanner s = new Scanner(new File("files/chains.txt"));
 		ArrayList<String> chains = new ArrayList<String>();
 		while (s.hasNextLine()){
@@ -81,7 +55,7 @@ public class Unchained {
 		return chains;
 	}
 	
-	public static ArrayList<String> curateRestaurants(ArrayList<String> foursquare, ArrayList<String> chain) {
+	private static ArrayList<String> curateRestaurants(ArrayList<String> foursquare, ArrayList<String> chain) {
 		ArrayList<String> nonChains = new ArrayList<>();
 		boolean isChain;
 		for(String venue : foursquare) {
@@ -102,7 +76,7 @@ public class Unchained {
 	
 	
 	/* VENUES */
-	public static ArrayList<String> get4SQVenues(String ll) throws FoursquareApiException {
+	private static ArrayList<String> get4SQVenues(String ll) throws FoursquareApiException {
 		ArrayList<String> result = new ArrayList<>();
 		FoursquareApi foursquareApi = new FoursquareApi(FOURSQUARE_ID, FOURDQUARE_SECRET, "www.google.com");
 		foursquareApi.setVersion("20150917");
@@ -123,7 +97,7 @@ public class Unchained {
 		return result;
 	}
 	
-	public static ArrayList<String> getYelpResults(String ll) {
+	private static ArrayList<String> getYelpResults(String ll) {
 		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
 		return yelpApi.queryAPI(yelpApi, ll);
 	}
