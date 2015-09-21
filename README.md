@@ -8,4 +8,6 @@ HOW TO USE:
 Run UnchainedTester.java (It's a CLI) and follow the on-screen instructions. A "Maps Query" is something like "5 miles left of Taco Mac Mall of GA"
 
 I hope you enjoy! Stay Unchained!
-- Jason
+-Jason
+
+Android app coming soon
