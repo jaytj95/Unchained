@@ -55,7 +55,7 @@ public class Util {
 		return null;
 	}
 	
-	private static JSONObject getJsonFromUrl(String url) {
+	public static JSONObject getJsonFromUrl(String url) {
 		JSONObject jObj = null;
 		HttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
 		HttpGet httpGet = new HttpGet(url);

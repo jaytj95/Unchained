@@ -105,7 +105,6 @@ public class YelpAPI {
 	 * @return <tt>String</tt> body of API response
 	 */
 	private String sendRequestAndGetResponse(OAuthRequest request) {
-//		System.out.println("Querying " + request.getCompleteUrl() + " ...");
 		this.service.signRequest(this.accessToken, request);
 		Response response = request.send();
 		return response.getBody();
@@ -126,10 +125,8 @@ public class YelpAPI {
 		JSONObject response = null;
 		try {
 			response = (JSONObject) parser.parse(searchResponseJSON);
-			System.out.println(response);
 		} catch (ParseException pe) {
 			System.out.println("Error: could not parse JSON response:");
-			System.out.println(searchResponseJSON);
 			System.exit(1);
 		}
 

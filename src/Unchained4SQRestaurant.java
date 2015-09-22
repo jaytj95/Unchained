@@ -10,5 +10,9 @@ public class Unchained4SQRestaurant extends UnchainedRestaurant {
 		this.setAddress(addr);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Unchained4SQRestaurant(String name, String address, String website, Double rating) {
+		super(name, address, website, rating);
+	}
 
 }

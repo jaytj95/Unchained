@@ -25,6 +25,7 @@ public class UnchainedTester {
 				try {
 					ArrayList<UnchainedRestaurant> nonChains = UnchainedAPI.getUnchainedRestaurants(query);
 					for(UnchainedRestaurant v : nonChains) {
+						if(v instanceof Unchained4SQRestaurant)
 						System.out.println(nonChains.indexOf(v) + 1 + ". " + v.getName());
 					}
 					System.out.println("\nWe found " + nonChains.size() + " non-chains\n");

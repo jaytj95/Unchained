@@ -12,9 +12,6 @@ import fi.foyt.foursquare.api.entities.CompactVenue;
 import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
 public class UnchainedAPI {
-	public static final String FOURSQUARE_ID = "NVH2HBDEWL00GLGRYWZMDSFK2FUZR00ICNDW0OOGXL13NUFY";
-	public static final String FOURDQUARE_SECRET = "TV04OXE1WM32JEHQLJTETFOE35KDHCEPNRHY35YCV5OOAH04";
-	public static final String FOURSQUARE_CATEGORY_RESTAURANTS = "4d4b7105d754a06374d81259";
 	
 	public static final String YELP_KEY = "1y6Y9ZQBDOctIKrq5NO7XQ";
 	public static final String YELP_SECRET = "852Nfvhn9yd7GnXoOyNsygmT2Ks";
@@ -30,7 +27,7 @@ public class UnchainedAPI {
 	}
 	
 	private static ArrayList<UnchainedRestaurant> getVenuesNearby(String ll) throws FoursquareApiException {
-		ArrayList<UnchainedRestaurant> fsResults = get4SQVenues(ll);
+		ArrayList<UnchainedRestaurant> fsResults = FoursquareAPI2.get4SQVenues(ll);
 		ArrayList<UnchainedRestaurant> yelpResults = getYelpResults(ll);
 		
 		ArrayList<UnchainedRestaurant> combined = new ArrayList<>();
@@ -73,27 +70,28 @@ public class UnchainedAPI {
 	
 	
 	/* VENUES */
-	private static ArrayList<UnchainedRestaurant> get4SQVenues(String ll) throws FoursquareApiException {
-		ArrayList<UnchainedRestaurant> result = new ArrayList<>();
-		FoursquareApi foursquareApi = new FoursquareApi(FOURSQUARE_ID, FOURDQUARE_SECRET, "www.google.com");
-		foursquareApi.setVersion("20150917");
-		Result<VenuesSearchResult> fsResult = foursquareApi.venuesSearch(ll, null, null, null, null, 100, null, FOURSQUARE_CATEGORY_RESTAURANTS, null, null, null, 24141, null);
-
-		if (fsResult.getMeta().getCode() == 200) {
-			for(CompactVenue v: fsResult.getResult().getVenues()) {
-				Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(v);
-				result.add(fsRestaurant);
-			}
-		} else {
-			// TODO: Proper error handling
-			System.out.println("Error occured: ");
-			System.out.println("  code: " + fsResult.getMeta().getCode());
-			System.out.println("  type: " + fsResult.getMeta().getErrorType());
-			System.out.println("  detail: " + fsResult.getMeta().getErrorDetail()); 
-		}
-		
-		return result;
-	}
+//	private static ArrayList<UnchainedRestaurant> get4SQVenues(String ll) throws FoursquareApiException {
+//		ArrayList<UnchainedRestaurant> result = new ArrayList<>();
+//		FoursquareApi foursquareApi = new FoursquareApi(FOURSQUARE_ID, FOURDQUARE_SECRET, "www.google.com");
+//		foursquareApi.setVersion("20150917");
+//		
+//		Result<VenuesSearchResult> fsResult = foursquareApi.venuesSearch(ll, null, null, null, null, 100, null, FOURSQUARE_CATEGORY_RESTAURANTS, null, null, null, 24141, null);
+//		
+//		if (fsResult.getMeta().getCode() == 200) {
+//			for(CompactVenue v: fsResult.getResult().getVenues()) {
+//				Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(v);
+//				result.add(fsRestaurant);
+//			}
+//		} else {
+//			// TODO: Proper error handling
+//			System.out.println("Error occured: ");
+//			System.out.println("  code: " + fsResult.getMeta().getCode());
+//			System.out.println("  type: " + fsResult.getMeta().getErrorType());
+//			System.out.println("  detail: " + fsResult.getMeta().getErrorDetail()); 
+//		}
+//		
+//		return result;
+//	}
 	
 	private static ArrayList<UnchainedRestaurant> getYelpResults(String ll) {
 		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
