@@ -1,6 +1,7 @@
 public class UnchainedRestaurant {
-	String name, address, website;
-	Double rating;
+
+	private String name, address, website;
+	private Double rating;
 
 	public UnchainedRestaurant(String name, String address, String website, Double rating) {
 		setName(name);
@@ -62,14 +63,18 @@ public class UnchainedRestaurant {
 		this.rating = rating;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		UnchainedRestaurant r = (UnchainedRestaurant) o;
+		String name1 = this.getName();
+		String name2 = r.getName();
 
-	public boolean equals(UnchainedRestaurant r) {
-		if(this.getName().equals(r.getName())) {
+		name1 = Util.normalizeVenueName(name1);
+		name2 = Util.normalizeVenueName(name2);
+		
+		if(name1.equals(name2)) {
 			return true;
 		} else return false;
 	}
-
-
-
 
 }

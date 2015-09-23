@@ -16,6 +16,7 @@ public class UnchainedTester {
 		//		keyboard.close();
 
 		Thread thread = new Thread(new Runnable() {
+			UnchainedAPI unchainedApi = new UnchainedAPI();
 			String query = ll;
 			@Override
 			public void run() {
@@ -23,9 +24,8 @@ public class UnchainedTester {
 					query = Util.getLatLngFromMapsQuery(query);
 				}
 				try {
-					ArrayList<UnchainedRestaurant> nonChains = UnchainedAPI.getUnchainedRestaurants(query);
+					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query);
 					for(UnchainedRestaurant v : nonChains) {
-						if(v instanceof Unchained4SQRestaurant)
 						System.out.println(nonChains.indexOf(v) + 1 + ". " + v.getName());
 					}
 					System.out.println("\nWe found " + nonChains.size() + " non-chains\n");
@@ -37,6 +37,8 @@ public class UnchainedTester {
 						if(i > 1 && i <= nonChains.size()) {
 							UnchainedRestaurant ucr = nonChains.get(i-1);
 							System.out.println(ucr.toString());
+						} else {
+							System.out.println("Please try again");
 						}
 					}
 

@@ -22,12 +22,18 @@ import org.scribe.oauth.OAuthService;
  * See <a href="http://www.yelp.com/developers/documentation">Yelp Documentation</a> for more info.
  * 
  */
-public class YelpAPI {
+public class YelpAPI extends ThirdPartyVenueAPI {
 
 	private static final String API_HOST = "api.yelp.com";
 	private static final int SEARCH_LIMIT = 20; //MAX
 	private static final String SEARCH_PATH = "/v2/search";
 	private static final String BUSINESS_PATH = "/v2/business";
+	
+
+	public static final String YELP_KEY = "1y6Y9ZQBDOctIKrq5NO7XQ";
+	public static final String YELP_SECRET = "852Nfvhn9yd7GnXoOyNsygmT2Ks";
+	public static final String YELP_TOKEN = "OHVBilTnx0nmS8_fVQxMJ6s41fcLoZA9";
+	public static final String YELP_TOKEN_SECRET = "3bjEG5GcVc-3vJ6UQIt1bgrGD2o";
 
 
 	OAuthService service;
@@ -41,11 +47,11 @@ public class YelpAPI {
 	 * @param token Token
 	 * @param tokenSecret Token secret
 	 */
-	public YelpAPI(String consumerKey, String consumerSecret, String token, String tokenSecret) {
+	public YelpAPI() {
 		this.service =
-				new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(consumerKey)
-				.apiSecret(consumerSecret).build();
-		this.accessToken = new Token(token, tokenSecret);
+				new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(YELP_KEY)
+				.apiSecret(YELP_SECRET).build();
+		this.accessToken = new Token(YELP_TOKEN, YELP_TOKEN_SECRET);
 	}
 
 	/**
@@ -58,14 +64,14 @@ public class YelpAPI {
 	 * @param location <tt>String</tt> of the location
 	 * @return <tt>String</tt> JSON Response
 	 */
-	public String searchForBusinessesByLocation(String term, String location) {
+	private String searchForBusinessesByLocation(String term, String location) {
 		OAuthRequest request = createOAuthRequest(SEARCH_PATH);
 		request.addQuerystringParameter("term", term);
 		request.addQuerystringParameter("location", location);
 		request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
 		return sendRequestAndGetResponse(request);
 	}
-	public String searchForBusinessesByLL(String term, String ll) {
+	private String searchForBusinessesByLL(String term, String ll) {
 		OAuthRequest request = createOAuthRequest(SEARCH_PATH);
 		request.addQuerystringParameter("term", term);
         request.addQuerystringParameter("ll", ll);
@@ -82,7 +88,7 @@ public class YelpAPI {
 	 * @param businessID <tt>String</tt> business ID of the requested business
 	 * @return <tt>String</tt> JSON Response
 	 */
-	public String searchByBusinessId(String businessID) {
+	private String searchByBusinessId(String businessID) {
 		OAuthRequest request = createOAuthRequest(BUSINESS_PATH + "/" + businessID);
 		return sendRequestAndGetResponse(request);
 	}
@@ -114,13 +120,11 @@ public class YelpAPI {
 	 * Queries the Search API based on the command line arguments and takes the first result to query
 	 * the Business API.
 	 * 
-	 * @param yelpApi <tt>YelpAPI</tt> service instance
-	 * @param yelpApiCli <tt>YelpAPICLI</tt> command line arguments
 	 */
-	public ArrayList<UnchainedRestaurant> queryAPI(YelpAPI yelpApi, String ll) {
+	@Override
+	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
 		ArrayList<UnchainedRestaurant> list = new ArrayList<>();
-		String searchResponseJSON =
-				yelpApi.searchForBusinessesByLL("restaurants", ll);
+		String searchResponseJSON = searchForBusinessesByLL("restaurants", ll);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
 		try {

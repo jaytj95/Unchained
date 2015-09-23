@@ -4,25 +4,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FoursquareAPI2 {
+public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 	public static final String FS_SEARCH = "https://api.foursquare.com/v2/venues/explore?"
 			+ "client_id=%s"
 			+ "&client_secret=%s"
 			+ "&v=20150922"
 			+ "&ll=%s"
-			+ "&query=sushi";
+			+ "&query=restaurant";
 
 	public static final String FOURSQUARE_ID = "NVH2HBDEWL00GLGRYWZMDSFK2FUZR00ICNDW0OOGXL13NUFY";
 	public static final String FOURSQUARE_SECRET = "TV04OXE1WM32JEHQLJTETFOE35KDHCEPNRHY35YCV5OOAH04";
 	public static final String FOURSQUARE_CATEGORY_RESTAURANTS = "4d4b7105d754a06374d81259";
 
-
-	private String oAuth;
-	public FoursquareAPI2(String oAuth) {
-		this.oAuth = oAuth;
-	}
-
-	public static ArrayList<UnchainedRestaurant> get4SQVenues(String ll) {
+	@Override
+	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		String url = String.format(FS_SEARCH, FOURSQUARE_ID, FOURSQUARE_SECRET, ll);
 		JSONObject fsResponse = Util.getJsonFromUrl(url);
@@ -47,7 +42,9 @@ public class FoursquareAPI2 {
 					}
 					
 					try{
-						website = venue.getString("url");
+//						website = venue.getString("url");
+						website = String.format("https://foursquare.com/v/%s/%s", name.replaceAll("[^a-zA-Z0-9]", "-"), 
+								venue.getString("id"));
 					} catch(JSONException e) {
 						website = null;
 					}
@@ -69,5 +66,6 @@ public class FoursquareAPI2 {
 		}
 		return venues;
 	}
+
 
 }

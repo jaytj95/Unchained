@@ -19,12 +19,17 @@ import org.json.JSONObject;
 
 public class Util {
 
-	public static final String GOOGLE_GEOCODING_API = 
-			"http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=true";
+//	public static final String GOOGLE_GEOCODING_API = 
+//			"http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=true";
+	
+	public static final String GOOGLE_GEOCODING_KEY = "AIzaSyBNxtP1FnsCQoBz6pOozC-WVRo_2ZoCmzQ";
+	public static final String GOOGLE_GEOCODING_ENDPOINT = 
+			"https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=" + GOOGLE_GEOCODING_KEY;
 
-	public static <T> ArrayList<T> removeDuplicates(ArrayList<T> arraylist) {
+
+	public static ArrayList<UnchainedRestaurant> removeDuplicates(ArrayList<UnchainedRestaurant> arraylist) {
 		//remove any duplicates
-		Set<T> setItems = new LinkedHashSet<T>(arraylist);
+		Set<UnchainedRestaurant> setItems = new LinkedHashSet<UnchainedRestaurant>(arraylist);
 		arraylist.clear();
 		arraylist.addAll(setItems);
 		return arraylist;
@@ -33,7 +38,7 @@ public class Util {
 	public static String getLatLngFromMapsQuery(String query) {
 		System.out.println("Geocoding query: " + query);
 		query = query.replace(' ', '+');
-		query = String.format(GOOGLE_GEOCODING_API, query);
+		query = String.format(GOOGLE_GEOCODING_ENDPOINT, query);
 		JSONObject responseJson = getJsonFromUrl(query);
 		try {
 			if(responseJson.getString("status").equals("OK")) {
@@ -45,7 +50,7 @@ public class Util {
 				System.out.println("Geocoding result: ll =" + ll);
 				return ll;
 			} else {
-				System.err.println("GEOCODE ERROR: STATUS = " + responseJson.getString("status"));
+				System.err.println("GOOGLE GEOCODE ERROR: STATUS = " + responseJson.getString("status"));
 				return null;
 			}
 		} catch (JSONException e) {
@@ -92,5 +97,13 @@ public class Util {
 			e.getMessage();
 		}
 		return jObj;
+	}
+	
+
+	public static String normalizeVenueName(String name) {
+		String normalized = name;
+		normalized = normalized.toLowerCase();
+		normalized = normalized.replaceAll("[^A-Za-z0-9]", "");
+		return normalized;
 	}
 }
