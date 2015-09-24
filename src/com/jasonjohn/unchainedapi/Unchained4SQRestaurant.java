@@ -1,3 +1,4 @@
+package com.jasonjohn.unchainedapi;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 
 public class Unchained4SQRestaurant extends UnchainedRestaurant {

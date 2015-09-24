@@ -1,3 +1,4 @@
+package com.jasonjohn.unchainedapi;
 import java.util.ArrayList;
 
 public abstract class ThirdPartyVenueAPI {

@@ -1,3 +1,4 @@
+package com.jasonjohn.unchainedapi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -39,8 +40,11 @@ public class UnchainedAPI {
 		combined.addAll(yelpResults);
 		combined.addAll(googleResults);
 
+		
 		//remove any duplicates
 		combined = Util.removeDuplicates(combined);
+		combined.trimToSize();
+
 		return combined;
 	}
 
@@ -58,11 +62,11 @@ public class UnchainedAPI {
 		ArrayList<UnchainedRestaurant> nonChains = new ArrayList<>();
 		boolean isChain;
 		for(UnchainedRestaurant venue : foursquare) {
-			String venueLC = venue.getName().toLowerCase();
+			String venueLC = Util.normalizeVenueName(venue.getName());
 			isChain = false;
 			for(String chainRestaurant : chain) {
-				chainRestaurant = chainRestaurant.toLowerCase();
-				if(venueLC.contains(chainRestaurant)) {
+				chainRestaurant = Util.normalizeVenueName(chainRestaurant);
+				if(venueLC.equals(chainRestaurant)) {
 					isChain = true;
 				}
 				

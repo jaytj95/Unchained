@@ -1,7 +1,9 @@
+package com.jasonjohn.unchainedapi;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,10 +31,10 @@ public class Util {
 
 	public static ArrayList<UnchainedRestaurant> removeDuplicates(ArrayList<UnchainedRestaurant> arraylist) {
 		//remove any duplicates
+		ArrayList<UnchainedRestaurant> noDuplicates = new ArrayList<>();
 		Set<UnchainedRestaurant> setItems = new LinkedHashSet<UnchainedRestaurant>(arraylist);
-		arraylist.clear();
-		arraylist.addAll(setItems);
-		return arraylist;
+		noDuplicates.addAll(setItems);
+		return noDuplicates;
 	}
 	
 	public static String getLatLngFromMapsQuery(String query) {

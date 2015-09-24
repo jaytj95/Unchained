@@ -1,3 +1,4 @@
+package com.jasonjohn.unchainedapi;
 
 public class UnchainedYelpRestaurant extends UnchainedRestaurant {
 

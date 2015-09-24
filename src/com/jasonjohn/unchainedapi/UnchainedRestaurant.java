@@ -1,3 +1,4 @@
+package com.jasonjohn.unchainedapi;
 public class UnchainedRestaurant {
 
 	private String name, address, website;
@@ -54,6 +55,11 @@ public class UnchainedRestaurant {
 					getName().replace(' ', '+'), getAddress().replace(' ', '+'));
 	}
 
+
+	@Override
+	public int hashCode() {
+		return Util.normalizeVenueName(this.getName()).hashCode();
+	}
 
 	public Double getRating() {
 		return rating;
