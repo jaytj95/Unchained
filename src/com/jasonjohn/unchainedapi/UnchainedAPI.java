@@ -14,12 +14,21 @@ import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
 public class UnchainedAPI {
 	
-	public static final String YELP_KEY = "1y6Y9ZQBDOctIKrq5NO7XQ";
-	public static final String YELP_SECRET = "852Nfvhn9yd7GnXoOyNsygmT2Ks";
-	public static final String YELP_TOKEN = "OHVBilTnx0nmS8_fVQxMJ6s41fcLoZA9";
-	public static final String YELP_TOKEN_SECRET = "3bjEG5GcVc-3vJ6UQIt1bgrGD2o";
+
 	
-	public UnchainedAPI() {
+	private String YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET; //yelp keys
+	private String FOURSQUARE_KEY, FOURSQUARE_SECRET; //foursquare keys 
+	private String GOOGLE_API; //geocoding + places
+	
+	public UnchainedAPI(String yelpKey, String yelpSecret, String yelpToken, String yelpTokenSecret, 
+			String fsKey, String fsSecret, String googleKey) {
+		YELP_KEY = yelpKey;
+		YELP_SECRET = yelpSecret;
+		YELP_TOKEN = yelpToken;
+		YELP_TOKEN_SECRET = yelpTokenSecret;
+		FOURSQUARE_KEY = fsKey;
+		FOURSQUARE_SECRET = fsSecret;
+		GOOGLE_API = googleKey;
 		
 	}
 	
@@ -66,7 +75,7 @@ public class UnchainedAPI {
 			isChain = false;
 			for(String chainRestaurant : chain) {
 				chainRestaurant = Util.normalizeVenueName(chainRestaurant);
-				if(venueLC.equals(chainRestaurant)) {
+				if(venueLC.contains(chainRestaurant)) {
 					isChain = true;
 				}
 				
@@ -77,17 +86,17 @@ public class UnchainedAPI {
 	}
 	
 	private ArrayList<UnchainedRestaurant> get4SQResults(String ll) {
-		FoursquareAPI2 fsApi2 = new FoursquareAPI2();
+		FoursquareAPI2 fsApi2 = new FoursquareAPI2(FOURSQUARE_KEY, FOURSQUARE_SECRET);
 		return fsApi2.getVenues(ll);
 	}
 	
 	private ArrayList<UnchainedRestaurant> getYelpResults(String ll) {
-		YelpAPI yelpApi = new YelpAPI();
+		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
 		return yelpApi.getVenues(ll);
 	}
 
 	private ArrayList<UnchainedRestaurant> getGooglePlacesResults(String ll) {
-		GooglePlacesAPI gpApi = new GooglePlacesAPI();
+		GooglePlacesAPI gpApi = new GooglePlacesAPI(GOOGLE_API);
 		return gpApi.getVenues(ll);
 	}
 }

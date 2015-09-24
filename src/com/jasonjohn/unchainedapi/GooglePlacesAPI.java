@@ -7,18 +7,19 @@ import org.json.JSONObject;
 
 public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 
-	public static final String GOOGLE_PLACES_KEY = "AIzaSyBNxtP1FnsCQoBz6pOozC-WVRo_2ZoCmzQ";
 	public static final String GOOGLE_PLACES_ENDPOINT = 
-			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=500&types=food&key="+GOOGLE_PLACES_KEY;
+			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=500&types=food&key=%s";
 	
-	public GooglePlacesAPI() {
-		
+	private String GOOGLE_KEY;
+	
+	public GooglePlacesAPI(String key) {
+		GOOGLE_KEY = key;
 	}
 
 	@Override
 	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
-		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll);
+		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll, GOOGLE_KEY);
 		System.out.println(url);
 		JSONObject googleResponse = Util.getJsonFromUrl(url);
 		try {

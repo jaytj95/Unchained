@@ -13,14 +13,18 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 			+ "&ll=%s"
 			+ "&query=restaurant";
 
-	public static final String FOURSQUARE_ID = "NVH2HBDEWL00GLGRYWZMDSFK2FUZR00ICNDW0OOGXL13NUFY";
-	public static final String FOURSQUARE_SECRET = "TV04OXE1WM32JEHQLJTETFOE35KDHCEPNRHY35YCV5OOAH04";
 	public static final String FOURSQUARE_CATEGORY_RESTAURANTS = "4d4b7105d754a06374d81259";
 
+	private String FS_KEY, FS_SECRET;
+	
+	public FoursquareAPI2(String key, String secret) {
+		FS_KEY = key;
+		FS_SECRET = secret;
+	}
 	@Override
 	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
-		String url = String.format(FS_SEARCH, FOURSQUARE_ID, FOURSQUARE_SECRET, ll);
+		String url = String.format(FS_SEARCH, FS_KEY, FS_SECRET, ll);
 		JSONObject fsResponse = Util.getJsonFromUrl(url);
 		try {
 			if(fsResponse.getJSONObject("meta").getInt("code") == 200) {

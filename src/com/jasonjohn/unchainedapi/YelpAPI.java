@@ -30,13 +30,6 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	private static final String SEARCH_PATH = "/v2/search";
 	private static final String BUSINESS_PATH = "/v2/business";
 	
-
-	public static final String YELP_KEY = "1y6Y9ZQBDOctIKrq5NO7XQ";
-	public static final String YELP_SECRET = "852Nfvhn9yd7GnXoOyNsygmT2Ks";
-	public static final String YELP_TOKEN = "OHVBilTnx0nmS8_fVQxMJ6s41fcLoZA9";
-	public static final String YELP_TOKEN_SECRET = "3bjEG5GcVc-3vJ6UQIt1bgrGD2o";
-
-
 	OAuthService service;
 	Token accessToken;
 
@@ -48,11 +41,11 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	 * @param token Token
 	 * @param tokenSecret Token secret
 	 */
-	public YelpAPI() {
+	public YelpAPI(String key, String secret, String token, String tokenSecret) {
 		this.service =
-				new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(YELP_KEY)
-				.apiSecret(YELP_SECRET).build();
-		this.accessToken = new Token(YELP_TOKEN, YELP_TOKEN_SECRET);
+				new ServiceBuilder().provider(TwoStepOAuth.class).apiKey(key)
+				.apiSecret(secret).build();
+		this.accessToken = new Token(token, tokenSecret);
 	}
 
 	/**
