@@ -1,6 +1,11 @@
 package com.jasonjohn.unchainedapi;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import fi.foyt.foursquare.api.FoursquareApiException;
@@ -15,8 +20,7 @@ public class UnchainedTester {
 	public static final String FOURSQUARE_SECRET = "TV04OXE1WM32JEHQLJTETFOE35KDHCEPNRHY35YCV5OOAH04";
 	public static final String DEAFULT_LL = "34.0619825,-83.9833599";
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) {		
 		//JAVA SAMPLE 
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter lat,lng or maps query");
@@ -33,6 +37,7 @@ public class UnchainedTester {
 				}
 				try {
 					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query);
+					
 					for(UnchainedRestaurant v : nonChains) {
 						System.out.println(nonChains.indexOf(v) + 1 + ". " + v.getName());
 					}
@@ -42,7 +47,7 @@ public class UnchainedTester {
 
 					int i;
 					while((i = keyboard.nextInt()) != -1) {
-						if(i > 1 && i <= nonChains.size()) {
+						if(i >= 1 && i <= nonChains.size()) {
 							UnchainedRestaurant ucr = nonChains.get(i-1);
 							System.out.println(ucr.toString());
 						} else {
@@ -59,6 +64,9 @@ public class UnchainedTester {
 					e.printStackTrace();
 				} catch (FoursquareApiException e) {
 					System.err.println("Foursquare API Exception");
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 

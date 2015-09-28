@@ -20,7 +20,6 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll, GOOGLE_KEY);
-		System.out.println(url);
 		JSONObject googleResponse = Util.getJsonFromUrl(url);
 		try {
 			if(googleResponse.getString("status").equals("OK")) {

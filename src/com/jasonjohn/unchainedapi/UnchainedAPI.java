@@ -1,16 +1,12 @@
 package com.jasonjohn.unchainedapi;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Scanner;
-import java.util.Set;
 
-import fi.foyt.foursquare.api.FoursquareApi;
 import fi.foyt.foursquare.api.FoursquareApiException;
-import fi.foyt.foursquare.api.Result;
-import fi.foyt.foursquare.api.entities.CompactVenue;
-import fi.foyt.foursquare.api.entities.VenuesSearchResult;
 
 public class UnchainedAPI {
 	
@@ -32,7 +28,7 @@ public class UnchainedAPI {
 		
 	}
 	
-	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String ll) throws FileNotFoundException, FoursquareApiException {
+	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String ll) throws FoursquareApiException, IOException {
 		ArrayList<String> chains = loadChainRestaurantsList();
 		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(ll);
 		
@@ -57,13 +53,14 @@ public class UnchainedAPI {
 		return combined;
 	}
 
-	private ArrayList<String> loadChainRestaurantsList() throws FileNotFoundException {
-		Scanner s = new Scanner(new File("files/chains.txt"));
+	private ArrayList<String> loadChainRestaurantsList() throws IOException {
 		ArrayList<String> chains = new ArrayList<String>();
-		while (s.hasNextLine()){
-		    chains.add(s.nextLine());
+		InputStream in=ClassLoader.getSystemResourceAsStream("chains.txt");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String name;
+		while((name = reader.readLine()) != null) {
+			chains.add(name);
 		}
-		s.close();
 		return chains;
 	}
 	
