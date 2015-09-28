@@ -1,9 +1,23 @@
 package com.jasonjohn.unchainedapi;
+/**
+ * UnchainedRestaurant, the heart of this API
+ * @author Jason John
+ *
+ */
 public class UnchainedRestaurant {
 
+	/** Various venue information */
 	private String name, address, website;
 	private Double rating;
+	
 
+	/**
+	 * Constructor that fills out all venue data
+	 * @param name Name of Venue
+	 * @param address Geographic address of venue
+	 * @param website Venue website (on review site, not actual company website)
+	 * @param rating Rating out of 5 stars
+	 */
 	public UnchainedRestaurant(String name, String address, String website, Double rating) {
 		setName(name);
 		setAddress(address);
