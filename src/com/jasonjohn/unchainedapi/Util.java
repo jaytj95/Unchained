@@ -19,16 +19,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Utility class for various helpful functions
+ * @author Jason John
+ *
+ */
 public class Util {
-
-//	public static final String GOOGLE_GEOCODING_API = 
-//			"http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=true";
 	
+	/**
+	 * Google Geocoding key and secret
+	 */
 	public static final String GOOGLE_GEOCODING_KEY = "AIzaSyBNxtP1FnsCQoBz6pOozC-WVRo_2ZoCmzQ";
 	public static final String GOOGLE_GEOCODING_ENDPOINT = 
 			"https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=" + GOOGLE_GEOCODING_KEY;
 
 
+	/**
+	 * Remove duplicate venue names
+	 * Throw them into a Set which doesn't allow for duplicates, then throw the set back into an arraylist
+	 * @param arraylist list of venues with duplicates
+	 * @return arraylist without duplicate venues
+	 */
 	public static ArrayList<UnchainedRestaurant> removeDuplicates(ArrayList<UnchainedRestaurant> arraylist) {
 		//remove any duplicates
 		ArrayList<UnchainedRestaurant> noDuplicates = new ArrayList<>();
@@ -37,6 +48,11 @@ public class Util {
 		return noDuplicates;
 	}
 	
+	/**
+	 * Get lat,lng from a Google Maps query (ie "Mall of GA")
+	 * @param query maps query (ie "Mall of GA" or "Buford Hwy")
+	 * @return lat,lng of specified location
+	 */
 	public static String getLatLngFromMapsQuery(String query) {
 		System.out.println("Geocoding query: " + query);
 		query = query.replace(' ', '+');
@@ -62,6 +78,11 @@ public class Util {
 		return null;
 	}
 	
+	/**
+	 * Function to query a URL and retrieve a JSON Response
+	 * @param url
+	 * @return
+	 */
 	public static JSONObject getJsonFromUrl(String url) {
 		JSONObject jObj = null;
 		HttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
@@ -102,6 +123,11 @@ public class Util {
 	}
 	
 
+	/**
+	 * Normalize venue names (used for comparisons) so that "McDonald's == Mcdonalds")
+	 * @param name
+	 * @return
+	 */
 	public static String normalizeVenueName(String name) {
 		String normalized = name;
 		normalized = normalized.toLowerCase();

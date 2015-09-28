@@ -5,24 +5,46 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Google Places API class to manually query venues
+ * @author Jason John
+ *
+ */
 public class GooglePlacesAPI extends ThirdPartyVenueAPI {
-
+	/**
+	 * Google Places search endpoint
+	 */
 	public static final String GOOGLE_PLACES_ENDPOINT = 
 			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=500&types=food&key=%s";
 	
+	/**
+	 * Google Key
+	 */
 	private String GOOGLE_KEY;
 	
+	/**
+	 * Constructor that takes in the API key for Google Places
+	 * @param key API Key
+	 */
 	public GooglePlacesAPI(String key) {
 		GOOGLE_KEY = key;
 	}
 
+	/**
+	 * Required method to get venues from GP
+	 * @param ll lat,lng
+	 * @return ArrayList of restaurants from GP
+	 */
 	@Override
 	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
+		//format endpoint for key, secret, and lat/lng
 		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll, GOOGLE_KEY);
 		JSONObject googleResponse = Util.getJsonFromUrl(url);
 		try {
+			//if meta code returns successful
 			if(googleResponse.getString("status").equals("OK")) {
+				//bunch of JSON sifting to get what we want
 				JSONArray array = googleResponse.getJSONArray("results");
 				for(int i = 0; i < array.length(); i++) {
 					JSONObject gVenue = array.getJSONObject(i);
