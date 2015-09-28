@@ -62,9 +62,6 @@ public class UnchainedTester {
 				} catch (FileNotFoundException e) {
 					System.err.println("File Not Found Exception");
 					e.printStackTrace();
-				} catch (FoursquareApiException e) {
-					System.err.println("Foursquare API Exception");
-					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

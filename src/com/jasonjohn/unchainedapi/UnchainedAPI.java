@@ -47,10 +47,9 @@ public class UnchainedAPI {
 	 * Core functionality: Load list of chain restaurants, get venues around me, curate the list to remove chains
 	 * @param ll lat,lng of current/specified location
 	 * @return list of non-chain restaurants
-	 * @throws FoursquareApiException - something up with the OAuth?
 	 * @throws IOException - something up with the file containing the list of chains? (chains.txt)
 	 */
-	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String ll) throws FoursquareApiException, IOException {
+	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String ll) throws IOException {
 		//get list of chains from file
 		ArrayList<String> chains = loadChainRestaurantsList();
 		//get list of restaurants around me
@@ -62,9 +61,8 @@ public class UnchainedAPI {
 	 * Takes in specified or geocoded lat,lng and returns all restaurants nearby
 	 * @param ll lat,lng of current/specified location
 	 * @return list of all restaurants (chains & non-chains) around specified location
-	 * @throws FoursquareApiException - something up with Foursquare OAuth?
 	 */
-	private ArrayList<UnchainedRestaurant> getVenuesNearby(String ll) throws FoursquareApiException {
+	private ArrayList<UnchainedRestaurant> getVenuesNearby(String ll) {
 		//get Foursquare results for venues
 		ArrayList<UnchainedRestaurant> fsResults = get4SQResults(ll);
 		//get Yelp results for venues
