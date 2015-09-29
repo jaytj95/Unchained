@@ -28,14 +28,15 @@ public class UnchainedTester {
 
 		Thread thread = new Thread(new Runnable() {
 			UnchainedAPI unchainedApi = new UnchainedAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET, 
-					FOURSQUARE_ID, FOURSQUARE_SECRET, GOOGLE_PLACES_KEY);;
+					FOURSQUARE_ID, FOURSQUARE_SECRET, GOOGLE_PLACES_KEY);
 			String query = ll;
 			@Override
 			public void run() {
-				if(!query.matches("%f,%f")) { 
+				if(!query.matches("-?[0-9.]*,-?[0-9.]*")) { 
 					query = Util.getLatLngFromMapsQuery(query);
 				}
 				try {
+					System.out.println("Finding venues...");
 					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query);
 					
 					for(UnchainedRestaurant v : nonChains) {
