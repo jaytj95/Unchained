@@ -32,6 +32,8 @@ public class UnchainedTester {
 			String query = ll;
 			@Override
 			public void run() {
+				System.out.printf("API STATUS:\nFoursquare: %b\tYelp: %b\tGoogle: %b\n\n", 
+						unchainedApi.isUsing4sq(), unchainedApi.isUsingYelp(), unchainedApi.isUsingGp());
 				if(!query.matches("-?[0-9.]*,-?[0-9.]*")) { 
 					query = Util.getLatLngFromMapsQuery(query);
 				}

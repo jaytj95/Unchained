@@ -21,6 +21,8 @@ public class UnchainedAPI {
 	private String FOURSQUARE_KEY, FOURSQUARE_SECRET; //foursquare keys 
 	private String GOOGLE_API_KEY; //geocoding + places
 	
+	private boolean use4sq, useYelp, useGp;
+
 	/**
 	 * Constructor for the UnchainedAPI - takes in API keys for various endpoints
 	 * @param yelpKey - Yelp Consumer Key
@@ -40,6 +42,18 @@ public class UnchainedAPI {
 		FOURSQUARE_KEY = fsKey;
 		FOURSQUARE_SECRET = fsSecret;
 		GOOGLE_API_KEY = googleKey;
+		
+		use4sq = useGp = useYelp = true;
+		
+		if(yelpKey == null || yelpSecret == null || yelpToken == null || yelpTokenSecret == null) {
+			useYelp = false;
+		}
+		
+		if(fsKey == null || fsSecret == null) {
+			use4sq = false;
+		}
+		
+		useGp = (googleKey == null) ? false : true;
 		
 	}
 	
@@ -64,18 +78,29 @@ public class UnchainedAPI {
 	 */
 	private ArrayList<UnchainedRestaurant> getVenuesNearby(String ll) {
 		//get Foursquare results for venues
-		ArrayList<UnchainedRestaurant> fsResults = get4SQResults(ll);
+		ArrayList<UnchainedRestaurant> fsResults = new ArrayList<>();
 		//get Yelp results for venues
-		ArrayList<UnchainedRestaurant> yelpResults = getYelpResults(ll);
+		ArrayList<UnchainedRestaurant> yelpResults = new ArrayList<>();
 		//get Google Places results for venues
-		ArrayList<UnchainedRestaurant> googleResults = getGooglePlacesResults(ll);
+		ArrayList<UnchainedRestaurant> googleResults = new ArrayList<>();
 		
 		//aggregate all results into one arraylist
 		ArrayList<UnchainedRestaurant> combined = new ArrayList<>();
-		combined.addAll(fsResults);
-		combined.addAll(yelpResults);
-		combined.addAll(googleResults);
-
+		
+		if(use4sq) {
+			fsResults = get4SQResults(ll);
+			combined.addAll(fsResults);
+		}
+		
+		if(useYelp) {
+			yelpResults = getYelpResults(ll);
+			combined.addAll(yelpResults);
+		}
+		
+		if(useGp) {
+			googleResults = getGooglePlacesResults(ll);
+			combined.addAll(googleResults);
+		}
 		
 		//remove any duplicates
 		combined = Util.removeDuplicates(combined);
@@ -160,5 +185,19 @@ public class UnchainedAPI {
 	private ArrayList<UnchainedRestaurant> getGooglePlacesResults(String ll) {
 		GooglePlacesAPI gpApi = new GooglePlacesAPI(GOOGLE_API_KEY);
 		return gpApi.getVenues(ll);
+	}
+	
+
+	
+	public boolean isUsing4sq() {
+		return use4sq;
+	}
+
+	public boolean isUsingYelp() {
+		return useYelp;
+	}
+
+	public boolean isUsingGp() {
+		return useGp;
 	}
 }
