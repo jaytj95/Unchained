@@ -12,5 +12,5 @@ public abstract class ThirdPartyVenueAPI {
 	 * @param ll lat,lng
 	 * @return ArrayList of restaurants from that specific endpoint
 	 */
-	public abstract ArrayList<UnchainedRestaurant> getVenues(String ll);
+	public abstract ArrayList<UnchainedRestaurant> getVenues(String query, String ll);
 }

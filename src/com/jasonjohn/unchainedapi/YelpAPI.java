@@ -116,9 +116,11 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	 * 
 	 */
 	@Override
-	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
+	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) {
+		//check to make sure user entered a query
+		query = (query == null || query.equals("")) ? "restaurant" : query;
 		ArrayList<UnchainedRestaurant> list = new ArrayList<>();
-		String searchResponseJSON = searchForBusinessesByLL("restaurants", ll);
+		String searchResponseJSON = searchForBusinessesByLL(query, ll);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
 		try {

@@ -1,14 +1,8 @@
 package com.jasonjohn.unchainedapi;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
-import fi.foyt.foursquare.api.FoursquareApiException;
 
 public class UnchainedTester {
 	public static final String GOOGLE_PLACES_KEY = "AIzaSyBNxtP1FnsCQoBz6pOozC-WVRo_2ZoCmzQ";
@@ -25,26 +19,34 @@ public class UnchainedTester {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter lat,lng or maps query");
 		final String ll = keyboard.nextLine();
-
+		System.out.println("Anything in particular (Sushi, pizza, burgers, etc.)? Or just press enter to continue");
+		final String choice = keyboard.nextLine().replace(' ', '+');
+		
 		Thread thread = new Thread(new Runnable() {
+
 			UnchainedAPI unchainedApi = new UnchainedAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET, 
 					FOURSQUARE_ID, FOURSQUARE_SECRET, GOOGLE_PLACES_KEY);
-			String query = ll;
+			
+			String location = ll;
+			String query = choice;
 			@Override
 			public void run() {
+//				unchainedApi.setUse4sq(false);
+//				unchainedApi.setUseYelp(false);
+//				unchainedApi.setUseGp(false);
 				System.out.printf("API STATUS:\nFoursquare: %b\tYelp: %b\tGoogle: %b\n\n", 
 						unchainedApi.isUsing4sq(), unchainedApi.isUsingYelp(), unchainedApi.isUsingGp());
-				if(!query.matches("-?[0-9.]*,-?[0-9.]*")) { 
-					query = Util.getLatLngFromMapsQuery(query);
+				if(!location.matches("-?[0-9.]*,-?[0-9.]*")) { 
+					location = Util.getLatLngFromMapsQuery(location);
 				}
 				try {
 					System.out.println("Finding venues...");
-					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query);
+					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query, location);
 					
 					for(UnchainedRestaurant v : nonChains) {
 						System.out.println(nonChains.indexOf(v) + 1 + ". " + v.getName());
 					}
-					System.out.println("\nWe found " + nonChains.size() + " non-chains\n");
+					System.out.println("\nWe found " + nonChains.size() + " non-chain(s)\n");
 
 					System.out.println("Enter the number of a non-chain you want to check out...-1 to exit");
 

@@ -15,7 +15,7 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 	 * Google Places search endpoint
 	 */
 	public static final String GOOGLE_PLACES_ENDPOINT = 
-			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=500&types=food&key=%s";
+			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=1000%s&types=food&key=%s";
 	
 	/**
 	 * Google Key
@@ -36,10 +36,12 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 	 * @return ArrayList of restaurants from GP
 	 */
 	@Override
-	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
+	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) {
+		//check to make sure user entered a query
+		query = (query == null || query.equals("")) ? "" : "&keyword="+query;
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		//format endpoint for key, secret, and lat/lng
-		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll, GOOGLE_KEY);
+		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll, query, GOOGLE_KEY);
 		JSONObject googleResponse = Util.getJsonFromUrl(url);
 		try {
 			//if meta code returns successful

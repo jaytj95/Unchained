@@ -19,7 +19,7 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 			+ "&client_secret=%s"
 			+ "&v=20150922"
 			+ "&ll=%s"
-			+ "&query=restaurant";
+			+ "&query=%s";
 
 	/**
 	 * Foursquare Key and Secret
@@ -42,10 +42,12 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 	 * @return ArrayList of restaurants from Foursquare
 	 */
 	@Override
-	public ArrayList<UnchainedRestaurant> getVenues(String ll) {
+	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) {
+		//check to make sure user entered a query
+		query = (query == null || query.equals("")) ? "restaurant" : query;
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		//format endpoint for key, secret, and lat/lng
-		String url = String.format(FS_SEARCH, FS_KEY, FS_SECRET, ll);
+		String url = String.format(FS_SEARCH, FS_KEY, FS_SECRET, ll, query);
 		JSONObject fsResponse = Util.getJsonFromUrl(url);
 		try {
 			//if meta code returns successful

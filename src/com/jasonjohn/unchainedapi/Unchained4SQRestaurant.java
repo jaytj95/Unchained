@@ -1,5 +1,4 @@
 package com.jasonjohn.unchainedapi;
-import fi.foyt.foursquare.api.entities.CompactVenue;
 
 /**
  * Unchained Restaurant - Foursquare
@@ -7,19 +6,6 @@ import fi.foyt.foursquare.api.entities.CompactVenue;
  *
  */
 public class Unchained4SQRestaurant extends UnchainedRestaurant {
-
-	/**
-	 * Constructor using Foursquare API Dependency
-	 * @param venue CompactVenue from API
-	 */
-	public Unchained4SQRestaurant(CompactVenue venue) {
-		super(venue.getName(), venue.getLocation().getAddress(), venue.getCanonicalUrl(), venue.getRating());
-
-		String addr = venue.getLocation().getAddress() + ", " + venue.getLocation().getCity() + ", " 
-				+ venue.getLocation().getState();
-		this.setAddress(addr);
-		// TODO Auto-generated constructor stub
-	}
 	
 	/**
 	 * Manual Constructor

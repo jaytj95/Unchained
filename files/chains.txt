@@ -17,6 +17,8 @@ CVS
 StopShop
 Bakers Square
 Baskin-Robbins
+walmart
+sams club
 Dunkin Donuts
 Great Wrap
 BaskinRobbins

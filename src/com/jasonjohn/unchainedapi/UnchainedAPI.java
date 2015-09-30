@@ -1,12 +1,9 @@
 package com.jasonjohn.unchainedapi;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import fi.foyt.foursquare.api.FoursquareApiException;
 
 /**
  * The UnchainedAPI class is a one-stop class to perform the application's core function
@@ -23,6 +20,11 @@ public class UnchainedAPI {
 	
 	private boolean use4sq, useYelp, useGp;
 
+
+	public UnchainedAPI() {
+		
+	}
+	
 	/**
 	 * Constructor for the UnchainedAPI - takes in API keys for various endpoints
 	 * @param yelpKey - Yelp Consumer Key
@@ -63,11 +65,11 @@ public class UnchainedAPI {
 	 * @return list of non-chain restaurants
 	 * @throws IOException - something up with the file containing the list of chains? (chains.txt)
 	 */
-	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String ll) throws IOException {
+	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll) throws IOException {
 		//get list of chains from file
 		ArrayList<String> chains = loadChainRestaurantsList();
 		//get list of restaurants around me
-		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(ll);
+		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(query, ll);
 		//return curated list
 		return curateRestaurants(restaurantsAroundMe, chains);
 	}
@@ -76,7 +78,7 @@ public class UnchainedAPI {
 	 * @param ll lat,lng of current/specified location
 	 * @return list of all restaurants (chains & non-chains) around specified location
 	 */
-	private ArrayList<UnchainedRestaurant> getVenuesNearby(String ll) {
+	private ArrayList<UnchainedRestaurant> getVenuesNearby(String query, String ll) {
 		//get Foursquare results for venues
 		ArrayList<UnchainedRestaurant> fsResults = new ArrayList<>();
 		//get Yelp results for venues
@@ -88,17 +90,17 @@ public class UnchainedAPI {
 		ArrayList<UnchainedRestaurant> combined = new ArrayList<>();
 		
 		if(use4sq) {
-			fsResults = get4SQResults(ll);
+			fsResults = get4SQResults(query, ll);
 			combined.addAll(fsResults);
 		}
 		
 		if(useYelp) {
-			yelpResults = getYelpResults(ll);
+			yelpResults = getYelpResults(query, ll);
 			combined.addAll(yelpResults);
 		}
 		
 		if(useGp) {
-			googleResults = getGooglePlacesResults(ll);
+			googleResults = getGooglePlacesResults(query, ll);
 			combined.addAll(googleResults);
 		}
 		
@@ -160,9 +162,9 @@ public class UnchainedAPI {
 	 * @param ll lat,lng
 	 * @return list of venues from Foursquare
 	 */
-	private ArrayList<UnchainedRestaurant> get4SQResults(String ll) {
+	private ArrayList<UnchainedRestaurant> get4SQResults(String query, String ll) {
 		FoursquareAPI2 fsApi2 = new FoursquareAPI2(FOURSQUARE_KEY, FOURSQUARE_SECRET);
-		return fsApi2.getVenues(ll);
+		return fsApi2.getVenues(query, ll);
 	}
 	
 
@@ -171,9 +173,9 @@ public class UnchainedAPI {
 	 * @param ll lat,lng
 	 * @return list of venues from Yelp
 	 */
-	private ArrayList<UnchainedRestaurant> getYelpResults(String ll) {
+	private ArrayList<UnchainedRestaurant> getYelpResults(String query, String ll) {
 		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
-		return yelpApi.getVenues(ll);
+		return yelpApi.getVenues(query, ll);
 	}
 
 
@@ -182,22 +184,102 @@ public class UnchainedAPI {
 	 * @param ll lat,lng
 	 * @return list of venues from Google Places
 	 */
-	private ArrayList<UnchainedRestaurant> getGooglePlacesResults(String ll) {
+	private ArrayList<UnchainedRestaurant> getGooglePlacesResults(String query, String ll) {
 		GooglePlacesAPI gpApi = new GooglePlacesAPI(GOOGLE_API_KEY);
-		return gpApi.getVenues(ll);
+		return gpApi.getVenues(query, ll);
 	}
 	
 
-	
+	/**
+	 * Return if the API is using Foursquare to get data
+	 * @return if API is using Foursquare data
+	 */
 	public boolean isUsing4sq() {
 		return use4sq;
 	}
 
+	/**
+	 * Return if the API is using Yelp to get data
+	 * @return if API is using Yelp data
+	 */
 	public boolean isUsingYelp() {
 		return useYelp;
 	}
 
+	/**
+	 * Return if the API is using Google Places to get data
+	 * @return if API is using Google Places data
+	 */
 	public boolean isUsingGp() {
 		return useGp;
+	}
+	
+	/**
+	 * Set use status for Foursquare
+	 * @param use4sq
+	 */
+	public void setUse4sq(boolean use4sq) {
+
+		if(FOURSQUARE_KEY == null || FOURSQUARE_SECRET == null) {
+			this.use4sq = false;
+		}		
+		
+		this.use4sq = use4sq;
+	}
+	
+	/**
+	 * Set use status for Yelp
+	 * @param useYelp
+	 */
+	public void setUseYelp(boolean useYelp) {
+
+		if(YELP_KEY == null || YELP_SECRET == null || YELP_TOKEN == null || YELP_TOKEN_SECRET == null) {
+			this.useYelp = false;
+		}		
+		
+		this.useYelp = useYelp;
+	}
+
+	/**
+	 * set use status for GP
+	 * @param useGp
+	 */
+	public void setUseGp(boolean useGp) {
+		this.useGp = (GOOGLE_API_KEY == null) ? false : useGp;
+	}
+	
+	/**
+	 * Set keys for Foursquare
+	 * @param key
+	 * @param secret
+	 */
+	public void setFoursquareKeys(String key, String secret) {
+		this.FOURSQUARE_KEY = key;
+		this.FOURSQUARE_SECRET = secret;
+		setUse4sq(true);
+	}
+	
+	/**
+	 * Set keys for Yelp
+	 * @param key
+	 * @param secret
+	 * @param tok
+	 * @param tokSec
+	 */
+	public void setYelpKeys(String key, String secret, String tok, String tokSec) {
+		YELP_KEY = key;
+		YELP_SECRET = secret;
+		YELP_TOKEN = tok;
+		YELP_TOKEN_SECRET = tokSec;
+		setUseYelp(true);
+	}
+	
+	/**
+	 * Set key for GP
+	 * @param key
+	 */
+	public void setGPKey(String key) {
+		GOOGLE_API_KEY = key;
+		setUseGp(true);
 	}
 }
