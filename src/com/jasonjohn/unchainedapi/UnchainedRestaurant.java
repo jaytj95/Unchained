@@ -92,7 +92,7 @@ public class UnchainedRestaurant {
 		name1 = Util.normalizeVenueName(name1);
 		name2 = Util.normalizeVenueName(name2);
 		
-		if(name1.equals(name2)) {
+		if(name1.contains(name2)) {
 			return true;
 		} else return false;
 	}

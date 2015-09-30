@@ -10,11 +10,16 @@ Atlanta Bread Company
 Auntie Anne's
 BJ's Restaurant & Brewery
 Bahama Breeze
+Stevi B's
+Mellow Mushroom
 Baja Fresh
 Supermarket
 Sunoco
 CVS
 StopShop
+QT
+QuikTrip
+Shell
 Bakers Square
 Baskin-Robbins
 walmart
@@ -26,6 +31,7 @@ Bruster
 College
 Beef O'Brady's
 Ben & Jerry's
+Haagen Dazs
 School
 Benihana
 Bennigan's

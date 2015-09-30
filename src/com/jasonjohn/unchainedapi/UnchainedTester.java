@@ -19,7 +19,7 @@ public class UnchainedTester {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter lat,lng or maps query");
 		final String ll = keyboard.nextLine();
-		System.out.println("Anything in particular (Sushi, pizza, burgers, etc.)? Or just press enter to continue");
+		System.out.println("Anything in particular? (Sushi, pizza, burgers, etc.)? Or just press enter to continue");
 		final String choice = keyboard.nextLine().replace(' ', '+');
 		
 		Thread thread = new Thread(new Runnable() {
