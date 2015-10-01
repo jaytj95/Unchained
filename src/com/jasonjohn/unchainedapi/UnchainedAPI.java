@@ -66,6 +66,7 @@ public class UnchainedAPI {
 	 * @throws IOException - something up with the file containing the list of chains? (chains.txt)
 	 */
 	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll) throws IOException {
+		query = query.replaceAll(" ", "+");
 		//get list of chains from file
 		ArrayList<String> chains = loadChainRestaurantsList();
 		//get list of restaurants around me
@@ -118,7 +119,7 @@ public class UnchainedAPI {
 	 */
 	private ArrayList<String> loadChainRestaurantsList() throws IOException {
 		ArrayList<String> chains = new ArrayList<String>();
-		InputStream in=ClassLoader.getSystemResourceAsStream("chains.txt");
+		InputStream in= UnchainedAPI.class.getResourceAsStream("/chains.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String name;
 		while((name = reader.readLine()) != null) {

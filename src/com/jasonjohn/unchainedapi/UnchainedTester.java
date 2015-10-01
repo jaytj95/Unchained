@@ -16,11 +16,11 @@ public class UnchainedTester {
 
 	public static void main(String[] args) {		
 		//JAVA SAMPLE 
-		Scanner keyboard = new Scanner(System.in);
+		final Scanner keyboard = new Scanner(System.in);
 		System.out.println("Enter lat,lng or maps query");
 		final String ll = keyboard.nextLine();
 		System.out.println("Anything in particular? (Sushi, pizza, burgers, etc.)? Or just press enter to continue");
-		final String choice = keyboard.nextLine().replace(' ', '+');
+		final String choice = keyboard.nextLine();
 		
 		Thread thread = new Thread(new Runnable() {
 
