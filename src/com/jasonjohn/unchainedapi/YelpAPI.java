@@ -29,7 +29,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	private static final int SEARCH_LIMIT = 20; //MAX
 	private static final String SEARCH_PATH = "/v2/search";
 	private static final String BUSINESS_PATH = "/v2/business";
-	
+
 	OAuthService service;
 	Token accessToken;
 
@@ -68,7 +68,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	private String searchForBusinessesByLL(String term, String ll) {
 		OAuthRequest request = createOAuthRequest(SEARCH_PATH);
 		request.addQuerystringParameter("term", term);
-        request.addQuerystringParameter("ll", ll);
+		request.addQuerystringParameter("ll", ll);
 		request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
 		return sendRequestAndGetResponse(request);
 	}
@@ -131,26 +131,30 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 		}
 
 		JSONArray businesses = (JSONArray) response.get("businesses");
-		for(int i = 0; i < businesses.size(); i++) {
-			JSONObject restaurant = (JSONObject) businesses.get(i);
-			String name = (String) restaurant.get("name");
-			
-			JSONObject location = (JSONObject) restaurant.get("location");
-			JSONArray addrArray = (JSONArray) location.get("address");
-			String address = (String) addrArray.get(0);
-			address += ", " + (String) location.get("city");
-			address += ", " + (String) location.get("state_code");
-			address += ", " + (String) location.get("postal_code");
-			
-			
-			
-			String website = (String) restaurant.get("mobile_url");
-			double rating = (Double) restaurant.get("rating");
-			
-			UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating);
-			list.add(yelpRestaurant);
+		try {
+			for(int i = 0; i < businesses.size(); i++) {
+				JSONObject restaurant = (JSONObject) businesses.get(i);
+				String name = (String) restaurant.get("name");
+
+				JSONObject location = (JSONObject) restaurant.get("location");
+				JSONArray addrArray = (JSONArray) location.get("address");
+				String address = (String) addrArray.get(0);
+				address += ", " + (String) location.get("city");
+				address += ", " + (String) location.get("state_code");
+				address += ", " + (String) location.get("postal_code");
+
+
+
+				String website = (String) restaurant.get("mobile_url");
+				double rating = (Double) restaurant.get("rating");
+
+				UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating);
+				list.add(yelpRestaurant);
+			}
+		} catch (Exception e) {
+			throw new UnchainedAPIException("Error getting Yelp venues");
 		}
-		
+
 		return list;
 	}
 
