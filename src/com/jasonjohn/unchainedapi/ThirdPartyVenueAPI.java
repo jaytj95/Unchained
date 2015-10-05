@@ -11,6 +11,7 @@ public abstract class ThirdPartyVenueAPI {
 	 * Required method to get venues, implemented by child class
 	 * @param ll lat,lng
 	 * @return ArrayList of restaurants from that specific endpoint
+	 * @throws UnchainedAPIException 
 	 */
-	public abstract ArrayList<UnchainedRestaurant> getVenues(String query, String ll);
+	public abstract ArrayList<UnchainedRestaurant> getVenues(String query, String ll) throws UnchainedAPIException;
 }

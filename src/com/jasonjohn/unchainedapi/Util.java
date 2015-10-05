@@ -52,8 +52,9 @@ public class Util {
 	 * Get lat,lng from a Google Maps query (ie "Mall of GA")
 	 * @param query maps query (ie "Mall of GA" or "Buford Hwy")
 	 * @return lat,lng of specified location
+	 * @throws UnchainedAPIException 
 	 */
-	public static String getLatLngFromMapsQuery(String query) {
+	public static String getLatLngFromMapsQuery(String query) throws UnchainedAPIException {
 		System.out.println("Geocoding query: " + query);
 		query = query.replace(' ', '+');
 		query = String.format(GOOGLE_GEOCODING_ENDPOINT, query);
@@ -68,14 +69,12 @@ public class Util {
 				System.out.println("Geocoding result: ll =" + ll);
 				return ll;
 			} else {
-				System.err.println("GOOGLE GEOCODE ERROR: STATUS = " + responseJson.getString("status"));
-				return null;
+				throw new UnchainedAPIException("GOOGLE GEOCODE ERROR: STATUS = " + responseJson.getString("status"));
 			}
+
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnchainedAPIException("GOOGLE GEOCODE ERROR: BAD JSON");
 		}
-		return null;
 	}
 	
 	/**

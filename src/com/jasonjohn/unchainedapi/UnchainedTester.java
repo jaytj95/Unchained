@@ -31,13 +31,15 @@ public class UnchainedTester {
 			String query = choice;
 			@Override
 			public void run() {
-//				unchainedApi.setUse4sq(false);
-//				unchainedApi.setUseYelp(false);
-//				unchainedApi.setUseGp(false);
 				System.out.printf("API STATUS:\nFoursquare: %b\tYelp: %b\tGoogle: %b\n\n", 
 						unchainedApi.isUsing4sq(), unchainedApi.isUsingYelp(), unchainedApi.isUsingGp());
 				if(!location.matches("-?[0-9.]*,-?[0-9.]*")) { 
-					location = Util.getLatLngFromMapsQuery(location);
+					try {
+						location = Util.getLatLngFromMapsQuery(location);
+					} catch (UnchainedAPIException e) {
+						System.err.println("We can't find the specified location ... Abort");
+						System.exit(1);
+					}
 				}
 				try {
 					System.out.println("Finding venues...");
@@ -64,12 +66,8 @@ public class UnchainedTester {
 					System.out.println("Thanks for stopping by");
 					System.out.println("Brought to you by Foursquare, Yelp, and Google Places!");
 					System.out.println("Stay Unchained ;) - Jason");
-				} catch (FileNotFoundException e) {
-					System.err.println("File Not Found Exception");
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (UnchainedAPIException e) {
+					System.err.println(e.getMessage());
 				}
 
 			}

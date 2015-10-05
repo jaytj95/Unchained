@@ -116,7 +116,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	 * 
 	 */
 	@Override
-	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) {
+	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) throws UnchainedAPIException {
 		//check to make sure user entered a query
 		query = (query == null || query.equals("")) ? "restaurant" : query;
 		ArrayList<UnchainedRestaurant> list = new ArrayList<>();

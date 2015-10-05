@@ -40,9 +40,10 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 	 * Required method to get venues from Foursquare
 	 * @param ll lat,lng
 	 * @return ArrayList of restaurants from Foursquare
+	 * @throws UnchainedAPIException 
 	 */
 	@Override
-	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) {
+	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) throws UnchainedAPIException {
 		//check to make sure user entered a query
 		query = (query == null || query.equals("")) ? "restaurant" : query;
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
@@ -91,11 +92,13 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 					venues.add(fsRestaurant);
 				}
 
+			} else {
+				throw new UnchainedAPIException("Error getting 4SQ venues");
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			throw new UnchainedAPIException("Error getting 4SQ venues");
+		} 
+		
 		return venues;
 	}
 

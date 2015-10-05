@@ -63,9 +63,10 @@ public class UnchainedAPI {
 	 * Core functionality: Load list of chain restaurants, get venues around me, curate the list to remove chains
 	 * @param ll lat,lng of current/specified location
 	 * @return list of non-chain restaurants
+	 * @throws UnchainedAPIException 
 	 * @throws IOException - something up with the file containing the list of chains? (chains.txt)
 	 */
-	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll) throws IOException {
+	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll) throws UnchainedAPIException {
 		query = query.replaceAll(" ", "+");
 		//get list of chains from file
 		ArrayList<String> chains = loadChainRestaurantsList();
@@ -78,6 +79,7 @@ public class UnchainedAPI {
 	 * Takes in specified or geocoded lat,lng and returns all restaurants nearby
 	 * @param ll lat,lng of current/specified location
 	 * @return list of all restaurants (chains & non-chains) around specified location
+	 * @throws UnchainedAPIException 
 	 */
 	private ArrayList<UnchainedRestaurant> getVenuesNearby(String query, String ll) {
 		//get Foursquare results for venues
@@ -91,17 +93,29 @@ public class UnchainedAPI {
 		ArrayList<UnchainedRestaurant> combined = new ArrayList<>();
 		
 		if(use4sq) {
-			fsResults = get4SQResults(query, ll);
+			try {
+				fsResults = get4SQResults(query, ll);
+			} catch (UnchainedAPIException e) {
+				//do nothing, leave arraylist empty
+			}
 			combined.addAll(fsResults);
 		}
 		
 		if(useYelp) {
-			yelpResults = getYelpResults(query, ll);
+			try {
+				yelpResults = getYelpResults(query, ll);
+			} catch (UnchainedAPIException e) {
+				//do nothing, leave arraylist empty
+			}
 			combined.addAll(yelpResults);
 		}
 		
 		if(useGp) {
-			googleResults = getGooglePlacesResults(query, ll);
+			try {
+				googleResults = getGooglePlacesResults(query, ll);
+			} catch (UnchainedAPIException e) {
+				//do nothing, leave arraylist empty
+			}
 			combined.addAll(googleResults);
 		}
 		
@@ -117,13 +131,17 @@ public class UnchainedAPI {
 	 * @return ArrayList of chain restaurants
 	 * @throws IOException something wrong with the chains.txt?
 	 */
-	private ArrayList<String> loadChainRestaurantsList() throws IOException {
+	private ArrayList<String> loadChainRestaurantsList() throws UnchainedAPIException {
 		ArrayList<String> chains = new ArrayList<String>();
 		InputStream in= UnchainedAPI.class.getResourceAsStream("/chains.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String name;
-		while((name = reader.readLine()) != null) {
-			chains.add(name);
+		try {
+			while((name = reader.readLine()) != null) {
+				chains.add(name);
+			}
+		} catch (IOException e) {
+			throw new UnchainedAPIException("Can't read list of chains");
 		}
 		return chains;
 	}
@@ -162,8 +180,9 @@ public class UnchainedAPI {
 	 * Get venue results from Foursquare V2
 	 * @param ll lat,lng
 	 * @return list of venues from Foursquare
+	 * @throws UnchainedAPIException 
 	 */
-	private ArrayList<UnchainedRestaurant> get4SQResults(String query, String ll) {
+	private ArrayList<UnchainedRestaurant> get4SQResults(String query, String ll) throws UnchainedAPIException {
 		FoursquareAPI2 fsApi2 = new FoursquareAPI2(FOURSQUARE_KEY, FOURSQUARE_SECRET);
 		return fsApi2.getVenues(query, ll);
 	}
@@ -174,7 +193,7 @@ public class UnchainedAPI {
 	 * @param ll lat,lng
 	 * @return list of venues from Yelp
 	 */
-	private ArrayList<UnchainedRestaurant> getYelpResults(String query, String ll) {
+	private ArrayList<UnchainedRestaurant> getYelpResults(String query, String ll) throws UnchainedAPIException {
 		YelpAPI yelpApi = new YelpAPI(YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET);
 		return yelpApi.getVenues(query, ll);
 	}
@@ -184,8 +203,9 @@ public class UnchainedAPI {
 	 * Get venue results from Google Places
 	 * @param ll lat,lng
 	 * @return list of venues from Google Places
+	 * @throws UnchainedAPIException 
 	 */
-	private ArrayList<UnchainedRestaurant> getGooglePlacesResults(String query, String ll) {
+	private ArrayList<UnchainedRestaurant> getGooglePlacesResults(String query, String ll) throws UnchainedAPIException {
 		GooglePlacesAPI gpApi = new GooglePlacesAPI(GOOGLE_API_KEY);
 		return gpApi.getVenues(query, ll);
 	}

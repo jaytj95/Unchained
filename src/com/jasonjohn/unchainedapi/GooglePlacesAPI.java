@@ -36,7 +36,7 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 	 * @return ArrayList of restaurants from GP
 	 */
 	@Override
-	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) {
+	public ArrayList<UnchainedRestaurant> getVenues(String query, String ll) throws UnchainedAPIException {
 		//check to make sure user entered a query
 		query = (query == null || query.equals("")) ? "" : "&keyword="+query;
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
@@ -56,10 +56,11 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 					double rating = (gVenue.has("rating")) ? gVenue.getDouble("rating") : -1;
 					venues.add(new UnchainedRestaurant(name, address, website, rating));
 				}
+			} else {
+				throw new UnchainedAPIException("Error getting GP venues");
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnchainedAPIException("Error getting GP venues");
 		}
 		
 		
