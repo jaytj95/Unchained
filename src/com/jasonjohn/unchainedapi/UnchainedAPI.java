@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 
 /**
@@ -72,7 +74,7 @@ public class UnchainedAPI {
 		ArrayList<String> chains = loadChainRestaurantsList();
 		//get list of restaurants around me
 		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(query, ll);
-		//return curated list
+		//return curat	ed list
 		return curateRestaurants(restaurantsAroundMe, chains);
 	}
 	/**
@@ -82,6 +84,9 @@ public class UnchainedAPI {
 	 * @throws UnchainedAPIException 
 	 */
 	private ArrayList<UnchainedRestaurant> getVenuesNearby(String query, String ll) {
+		query = Normalizer.normalize(query, Form.NFD);
+		query = query.replaceAll("[^A-Za-z0-9]", "");
+		
 		//get Foursquare results for venues
 		ArrayList<UnchainedRestaurant> fsResults = new ArrayList<>();
 		//get Yelp results for venues

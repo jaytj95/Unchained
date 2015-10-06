@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -57,6 +59,8 @@ public class Util {
 	public static String getLatLngFromMapsQuery(String query) throws UnchainedAPIException {
 		System.out.println("Geocoding query: " + query);
 		query = query.replace(' ', '+');
+		query = Normalizer.normalize(query, Form.NFD);
+		query = query.replaceAll("[^A-Za-z0-9]", "");
 		query = String.format(GOOGLE_GEOCODING_ENDPOINT, query);
 		JSONObject responseJson = getJsonFromUrl(query);
 		try {
