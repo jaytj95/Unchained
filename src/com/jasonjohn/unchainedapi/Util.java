@@ -20,6 +20,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parse4j.Parse;
 
 /**
  * Utility class for various helpful functions
@@ -161,5 +162,13 @@ public class Util {
 		normalized = normalized.toLowerCase();
 		normalized = normalized.replaceAll("[^A-Za-z0-9]", "");
 		return normalized;
+	}
+	
+
+	/**
+	 * Update the chains.txt file if the local one is out of date
+	 */
+	private void checkForChainsUpdates() {
+		Parse.initialize("vI3NcItKiNXqihGNhwRTByuLEldT0z3Xys0hMPe2", "PO0MmneJArScl7MJAvkzPjov2l3M6CdCSlP9oMzX");
 	}
 }

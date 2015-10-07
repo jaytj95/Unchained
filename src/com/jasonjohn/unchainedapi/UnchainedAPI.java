@@ -1,5 +1,6 @@
 package com.jasonjohn.unchainedapi;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -71,7 +72,7 @@ public class UnchainedAPI {
 	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll) throws UnchainedAPIException {
 		query = query.replaceAll(" ", "+");
 		//get list of chains from file
-		ArrayList<String> chains = loadChainRestaurantsList();
+		ArrayList<String> chains = loadChainRestaurantsList(new File("chains"));
 		//get list of restaurants around me
 		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(query, ll);
 		//return curat	ed list
@@ -136,9 +137,11 @@ public class UnchainedAPI {
 	 * @return ArrayList of chain restaurants
 	 * @throws IOException something wrong with the chains.txt?
 	 */
-	private ArrayList<String> loadChainRestaurantsList() throws UnchainedAPIException {
+	private ArrayList<String> loadChainRestaurantsList(File chainsFile) throws UnchainedAPIException {
 		ArrayList<String> chains = new ArrayList<String>();
-		InputStream in= UnchainedAPI.class.getResourceAsStream("/chains.txt");
+		
+		InputStream in= UnchainedAPI.class.getResourceAsStream(chainsFile.getAbsolutePath());
+		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String name;
 		try {
