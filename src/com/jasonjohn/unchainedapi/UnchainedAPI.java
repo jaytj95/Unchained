@@ -125,7 +125,7 @@ public class UnchainedAPI {
 		}
 		
 		//remove any duplicates
-		combined = Util.removeDuplicates(combined);
+		combined = Util.removeDuplicatesManually(combined);
 		combined.trimToSize();
 
 		return combined;

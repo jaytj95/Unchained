@@ -27,7 +27,7 @@ import org.json.JSONObject;
  *
  */
 public class Util {
-	
+
 	/**
 	 * Google Geocoding key and secret
 	 */
@@ -49,7 +49,32 @@ public class Util {
 		noDuplicates.addAll(setItems);
 		return noDuplicates;
 	}
-	
+
+	public static ArrayList<UnchainedRestaurant> removeDuplicatesManually(ArrayList<UnchainedRestaurant> chains) {
+		int size = chains.size();
+
+		// not using a method in the check also speeds up the execution
+		// also i must be less that size-1 so that j doesn't
+		// throw IndexOutOfBoundsException
+		for (int i = 0; i < size - 1; i++) {
+			// start from the next item after strings[i]
+			// since the ones before are checked
+			for (int j = i + 1; j < size; j++) {
+				// no need for if ( i == j ) here
+				if (!chains.get(j).equals(chains.get(i)))
+					continue;
+				chains.remove(j);
+				// decrease j because the array got re-indexed
+				j--;
+				// decrease the size of the array
+				size--;
+			} // for j
+		} // for i
+
+		return chains;
+
+	}
+
 	/**
 	 * Get lat,lng from a Google Maps query (ie "Mall of GA")
 	 * @param query maps query (ie "Mall of GA" or "Buford Hwy")
@@ -69,7 +94,7 @@ public class Util {
 				JSONObject geometryObject = resultsArray.getJSONObject(0).getJSONObject("geometry");
 				JSONObject location = geometryObject.getJSONObject("location");
 				String ll = location.getString("lat") + "," + location.getString("lng");
-				
+
 				System.out.println("Geocoding result: ll =" + ll);
 				return ll;
 			} else {
@@ -80,7 +105,7 @@ public class Util {
 			throw new UnchainedAPIException("GOOGLE GEOCODE ERROR: BAD JSON");
 		}
 	}
-	
+
 	/**
 	 * Function to query a URL and retrieve a JSON Response
 	 * @param url
@@ -124,7 +149,7 @@ public class Util {
 		}
 		return jObj;
 	}
-	
+
 
 	/**
 	 * Normalize venue names (used for comparisons) so that "McDonald's == Mcdonalds")
