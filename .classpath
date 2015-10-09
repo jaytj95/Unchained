@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/httpmime-4.3.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/almonds-1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

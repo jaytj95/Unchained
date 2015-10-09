@@ -1,5 +1,7 @@
 package com.jasonjohn.unchainedapi;
 
+import java.util.ArrayList;
+
 /**
  * Unchained Restaurant - Foursquare
  * @author Jason John
@@ -14,8 +16,8 @@ public class Unchained4SQRestaurant extends UnchainedRestaurant {
 	 * @param website Wesbite URL
 	 * @param rating rating out of 5
 	 */
-	public Unchained4SQRestaurant(String name, String address, String website, Double rating) {
-		super(name, address, website, rating);
+	public Unchained4SQRestaurant(String name, String address, String website, Double rating, ArrayList<String> pics) {
+		super(name, address, website, rating, pics);
 	}
 
 }

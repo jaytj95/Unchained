@@ -1,4 +1,7 @@
 package com.jasonjohn.unchainedapi;
+
+import java.util.ArrayList;
+
 /**
  * UnchainedRestaurant, the heart of this API
  * @author Jason John
@@ -9,8 +12,8 @@ public class UnchainedRestaurant {
 	/** Various venue information */
 	private String name, address, website;
 	private Double rating;
+	private ArrayList<String> picUrls;
 	
-
 	/**
 	 * Constructor that fills out all venue data
 	 * @param name Name of Venue
@@ -18,11 +21,12 @@ public class UnchainedRestaurant {
 	 * @param website Venue website (on review site, not actual company website)
 	 * @param rating Rating out of 5 stars
 	 */
-	public UnchainedRestaurant(String name, String address, String website, Double rating) {
+	public UnchainedRestaurant(String name, String address, String website, Double rating, ArrayList<String> pics) {
 		setName(name);
 		setAddress(address);
 		setWebsite(website);
 		setRating(rating);
+		setPicUrls(pics);
 	}
 
 	@Override
@@ -36,6 +40,8 @@ public class UnchainedRestaurant {
 			s+= "No rating data for this venue";
 		else
 			s += getRating() + "/5\n";
+		
+		s += "Pic: " + getPicUrls().get(0) + "\n";
 		return s;
 	}
 
@@ -97,4 +103,14 @@ public class UnchainedRestaurant {
 		} else return false;
 	}
 
+
+	public ArrayList<String> getPicUrls() {
+		return picUrls;
+	}
+
+	public void setPicUrls(ArrayList<String> picUrls) {
+		this.picUrls = picUrls;
+	}
+
+	
 }

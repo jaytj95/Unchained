@@ -1,9 +1,9 @@
 package com.jasonjohn.unchainedapi;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
@@ -21,6 +21,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pablo127.almonds.GetCallback;
+import pablo127.almonds.Parse;
+import pablo127.almonds.ParseException;
+import pablo127.almonds.ParseObject;
+import pablo127.almonds.ParseQuery;
+
 /**
  * Utility class for various helpful functions
  * @author Jason John
@@ -34,6 +40,9 @@ public class Util {
 	public static final String GOOGLE_GEOCODING_KEY = "AIzaSyBNxtP1FnsCQoBz6pOozC-WVRo_2ZoCmzQ";
 	public static final String GOOGLE_GEOCODING_ENDPOINT = 
 			"https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=" + GOOGLE_GEOCODING_KEY;
+	public static final String PARSE_APP_ID = "vI3NcItKiNXqihGNhwRTByuLEldT0z3Xys0hMPe2";
+	public static final String PARSE_REST_ID = "PO0MmneJArScl7MJAvkzPjov2l3M6CdCSlP9oMzX"; 
+	
 
 
 	/**
@@ -161,5 +170,31 @@ public class Util {
 		normalized = normalized.toLowerCase();
 		normalized = normalized.replaceAll("[^A-Za-z0-9]", "");
 		return normalized;
+	}
+	
+	/**
+	 * Update specified chains file if it's out of date (24 hrs)
+	 * @param path the path to the chains file
+	 */
+	public static void updateChainsFile(File file) {
+		long fileTime = file.lastModified();
+		long currentTime = System.currentTimeMillis();
+		if((currentTime - fileTime) < 8.64e7) {
+			System.out.println("Need new file from Parse...");
+			//time to do parse stuff
+			Parse.initialize(PARSE_APP_ID, PARSE_REST_ID);
+			ParseQuery query = new ParseQuery("Chains");
+			query.getInBackground("03plzIDDms", new GetCallback() {
+				@Override
+				public void done(ParseObject obj) {
+					if (obj != null) {
+						System.out.println("SUCCESS");
+						
+					} else {
+						System.out.println("FAIL");
+					}
+				}
+			});
+		}
 	}
 }

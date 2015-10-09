@@ -1,5 +1,8 @@
 package com.jasonjohn.unchainedapi;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,6 +80,16 @@ public class UnchainedAPI {
 		//return curat	ed list
 		return curateRestaurants(restaurantsAroundMe, chains);
 	}
+	
+	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll, String path) throws UnchainedAPIException {
+		query = query.replaceAll(" ", "+");
+		//get list of chains from file
+		ArrayList<String> chains = loadChainRestaurantsList(path);
+		//get list of restaurants around me
+		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(query, ll);
+		//return curat	ed list
+		return curateRestaurants(restaurantsAroundMe, chains);
+	}
 	/**
 	 * Takes in specified or geocoded lat,lng and returns all restaurants nearby
 	 * @param ll lat,lng of current/specified location
@@ -139,6 +152,35 @@ public class UnchainedAPI {
 	private ArrayList<String> loadChainRestaurantsList() throws UnchainedAPIException {
 		ArrayList<String> chains = new ArrayList<String>();
 		InputStream in= UnchainedAPI.class.getResourceAsStream("/chains.txt");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String name;
+		try {
+			while((name = reader.readLine()) != null) {
+				chains.add(name);
+			}
+		} catch (IOException e) {
+			throw new UnchainedAPIException("Can't read list of chains");
+		}
+		return chains;
+	}
+	
+	/**
+	 * Load chain restaurants from file as an ArrayList
+	 * @return ArrayList of chain restaurants
+	 * @throws IOException something wrong with the chains.txt?
+	 */
+	private ArrayList<String> loadChainRestaurantsList(String path) throws UnchainedAPIException {
+		ArrayList<String> chains = new ArrayList<String>();
+		InputStream in;
+		try {
+			File f = new File(path);
+			Util.updateChainsFile(f);
+			
+			
+			in = new FileInputStream(f);
+		} catch (FileNotFoundException e1) {
+			throw new UnchainedAPIException("Can't read list of chains");
+		}
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String name;
 		try {

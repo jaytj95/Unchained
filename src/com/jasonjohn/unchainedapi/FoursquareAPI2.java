@@ -19,6 +19,7 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 			+ "&client_secret=%s"
 			+ "&v=20150922"
 			+ "&ll=%s"
+			+ "&venuePhotos=1"
 			+ "&query=%s";
 
 	/**
@@ -49,6 +50,7 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		//format endpoint for key, secret, and lat/lng
 		String url = String.format(FS_SEARCH, FS_KEY, FS_SECRET, ll, query);
+		System.out.println(url);
 		JSONObject fsResponse = Util.getJsonFromUrl(url);
 		try {
 			//if meta code returns successful
@@ -87,8 +89,18 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 					} catch(JSONException e) {
 						rating = -1;
 					}
+					
+					ArrayList<String> picUrls = new ArrayList<>();
+					try {
+						JSONObject jObj = venue.getJSONObject("photos").getJSONArray("groups").getJSONObject(0).getJSONArray("items")
+								.getJSONObject(0);
+						String pic = "https://irs2.4sqi.net/img/general/500x500" + jObj.getString("suffix");
+						picUrls.add(pic);
+					} catch (JSONException e) {
+						//eat it
+					}
 					//create an UnchainedRestaurant out of this and add it to the list of venues
-					Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(name, address, website, rating);
+					Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(name, address, website, rating, picUrls);
 					venues.add(fsRestaurant);
 				}
 
