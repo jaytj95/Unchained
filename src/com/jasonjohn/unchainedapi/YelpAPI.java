@@ -137,18 +137,28 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 				String name = (String) restaurant.get("name");
 
 				JSONObject location = (JSONObject) restaurant.get("location");
-				JSONArray addrArray = (JSONArray) location.get("address");
-				String address = (String) addrArray.get(0);
-				address += ", " + (String) location.get("city");
-				address += ", " + (String) location.get("state_code");
-				address += ", " + (String) location.get("postal_code");
-
+				String address = null;
+				if(location != null) {
+					JSONArray addrArray = (JSONArray) location.get("address");
+					address = (String) addrArray.get(0);
+					if(address != null) {
+						address += ", " + (String) location.get("city");
+						address += ", " + (String) location.get("state_code");
+						address += ", " + (String) location.get("postal_code");
+					}
+				}
 
 
 				String website = (String) restaurant.get("mobile_url");
 				double rating = (Double) restaurant.get("rating");
 
-				UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating);
+				ArrayList<String> picUrls = new ArrayList<>();
+				String pic = (String) restaurant.get("image_url");
+				if(pic != null) {
+					picUrls.add(pic);
+				}
+				
+				UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating, picUrls);
 				list.add(yelpRestaurant);
 			}
 		} catch (Exception e) {

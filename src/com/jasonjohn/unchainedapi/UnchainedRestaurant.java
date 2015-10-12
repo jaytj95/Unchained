@@ -1,4 +1,7 @@
 package com.jasonjohn.unchainedapi;
+
+import java.util.ArrayList;
+
 /**
  * UnchainedRestaurant, the heart of this API
  * @author Jason John
@@ -9,8 +12,8 @@ public class UnchainedRestaurant {
 	/** Various venue information */
 	private String name, address, website;
 	private Double rating;
+	private ArrayList<String> picUrls;
 	
-
 	/**
 	 * Constructor that fills out all venue data
 	 * @param name Name of Venue
@@ -18,24 +21,27 @@ public class UnchainedRestaurant {
 	 * @param website Venue website (on review site, not actual company website)
 	 * @param rating Rating out of 5 stars
 	 */
-	public UnchainedRestaurant(String name, String address, String website, Double rating) {
+	public UnchainedRestaurant(String name, String address, String website, Double rating, ArrayList<String> pics) {
 		setName(name);
 		setAddress(address);
 		setWebsite(website);
 		setRating(rating);
+		setPicUrls(pics);
 	}
 
 	@Override
 	public String toString() {
 		String s = "Restaurant Info for: " + getName() + "\n";
 
-		s += getAddress() + "\n";
+		s += (getAddress() == null) ? "No address data for this venue\n" : getAddress() + "\n";
 		s += getWebsite() + "\n";
 		
 		if(getRating() == -1) 
 			s+= "No rating data for this venue";
 		else
 			s += getRating() + "/5\n";
+		
+		s += "Pic: " + getPicUrls().get(0) + "\n";
 		return s;
 	}
 
@@ -52,9 +58,7 @@ public class UnchainedRestaurant {
 	}
 
 	public void setAddress(String address) {
-		if(address != null)
-			this.address = address;
-		else this.address = "No address data for this venue";
+		this.address = address;
 	}
 
 	public String getWebsite() {
@@ -65,7 +69,7 @@ public class UnchainedRestaurant {
 		if(website != null) 
 			this.website = website;
 		else
-			this.website = "Google Search: " + String.format("http://www.google.com/search?q=%s+%s",
+			this.website = String.format("http://www.google.com/search?q=%s+%s",
 					getName().replace(' ', '+'), getAddress().replace(' ', '+'));
 	}
 
@@ -97,4 +101,12 @@ public class UnchainedRestaurant {
 		} else return false;
 	}
 
+
+	public ArrayList<String> getPicUrls() {
+		return picUrls;
+	}
+
+	public void setPicUrls(ArrayList<String> picUrls) {
+		this.picUrls = picUrls;
+	}
 }

@@ -15,8 +15,9 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 	 * Google Places search endpoint
 	 */
 	public static final String GOOGLE_PLACES_ENDPOINT = 
-			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=1000%s&types=food&key=%s";
-	
+			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=1000%sphoto?maxWidth=400&types=food&key=%s";
+	public static final String GOOGLE_PHOTO_ENDPOINT =
+			"https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=%s&key=%s";
 	/**
 	 * Google Key
 	 */
@@ -54,7 +55,14 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 					String address = (gVenue.has("vicinity")) ? gVenue.getString("vicinity") : null;
 					String website = null; //no website data...let superclass handle google search url
 					double rating = (gVenue.has("rating")) ? gVenue.getDouble("rating") : -1;
-					venues.add(new UnchainedRestaurant(name, address, website, rating));
+					String refId = (gVenue.has("reference")) ? gVenue.getString("reference") : null;
+					ArrayList<String> picUrls = new ArrayList<>();
+					if(refId != null) {
+						String pic = getPicUrl(refId);
+						picUrls.add(pic);
+					}
+					
+					venues.add(new UnchainedRestaurant(name, address, website, rating, picUrls));
 				}
 			} else {
 				throw new UnchainedAPIException("Error getting GP venues");
@@ -68,4 +76,8 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 		
 	}
 
+	private String getPicUrl(String refId) {
+		String url = String.format(GOOGLE_KEY, refId, GOOGLE_KEY);
+		return url;
+	}
 }
