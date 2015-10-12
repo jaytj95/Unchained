@@ -42,7 +42,7 @@ public class UnchainedAPI {
 	 */
 	public UnchainedAPI(String yelpKey, String yelpSecret, String yelpToken, String yelpTokenSecret, 
 			String fsKey, String fsSecret, String googleKey) {
-		super();
+		this();
 		YELP_KEY = yelpKey;
 		YELP_SECRET = yelpSecret;
 		YELP_TOKEN = yelpToken;
