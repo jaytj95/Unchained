@@ -22,14 +22,14 @@ public class UnchainedAPI {
 	private String YELP_KEY, YELP_SECRET, YELP_TOKEN, YELP_TOKEN_SECRET; //yelp keys
 	private String FOURSQUARE_KEY, FOURSQUARE_SECRET; //foursquare keys 
 	private String GOOGLE_API_KEY; //geocoding + places
-	
-	private boolean use4sq, useYelp, useGp;
 
+	private boolean use4sq, useYelp, useGp;
+	private ArrayList<String> chains;
 
 	public UnchainedAPI() {
-		
+		chains = new ArrayList<>();
 	}
-	
+
 	/**
 	 * Constructor for the UnchainedAPI - takes in API keys for various endpoints
 	 * @param yelpKey - Yelp Consumer Key
@@ -42,6 +42,7 @@ public class UnchainedAPI {
 	 */
 	public UnchainedAPI(String yelpKey, String yelpSecret, String yelpToken, String yelpTokenSecret, 
 			String fsKey, String fsSecret, String googleKey) {
+		super();
 		YELP_KEY = yelpKey;
 		YELP_SECRET = yelpSecret;
 		YELP_TOKEN = yelpToken;
@@ -49,21 +50,21 @@ public class UnchainedAPI {
 		FOURSQUARE_KEY = fsKey;
 		FOURSQUARE_SECRET = fsSecret;
 		GOOGLE_API_KEY = googleKey;
-		
+
 		use4sq = useGp = useYelp = true;
-		
+
 		if(yelpKey == null || yelpSecret == null || yelpToken == null || yelpTokenSecret == null) {
 			useYelp = false;
 		}
-		
+
 		if(fsKey == null || fsSecret == null) {
 			use4sq = false;
 		}
-		
+
 		useGp = (googleKey == null) ? false : true;
-		
+
 	}
-	
+
 	/**
 	 * Core functionality: Load list of chain restaurants, get venues around me, curate the list to remove chains
 	 * @param ll lat,lng of current/specified location
@@ -74,13 +75,15 @@ public class UnchainedAPI {
 	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll) throws UnchainedAPIException {
 		query = query.replaceAll(" ", "+");
 		//get list of chains from file
-		ArrayList<String> chains = loadChainRestaurantsList();
+		if(chains.isEmpty()) {
+			chains = loadChainRestaurantsList();
+		}
 		//get list of restaurants around me
 		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(query, ll);
 		//return curat	ed list
 		return curateRestaurants(restaurantsAroundMe, chains);
 	}
-	
+
 	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll, String path) throws UnchainedAPIException {
 		query = query.replaceAll(" ", "+");
 		//get list of chains from file
@@ -99,17 +102,17 @@ public class UnchainedAPI {
 	private ArrayList<UnchainedRestaurant> getVenuesNearby(String query, String ll) {
 		query = Normalizer.normalize(query, Form.NFD);
 		query = query.replaceAll("[^A-Za-z0-9]", "");
-		
+
 		//get Foursquare results for venues
 		ArrayList<UnchainedRestaurant> fsResults = new ArrayList<>();
 		//get Yelp results for venues
 		ArrayList<UnchainedRestaurant> yelpResults = new ArrayList<>();
 		//get Google Places results for venues
 		ArrayList<UnchainedRestaurant> googleResults = new ArrayList<>();
-		
+
 		//aggregate all results into one arraylist
 		ArrayList<UnchainedRestaurant> combined = new ArrayList<>();
-		
+
 		if(use4sq) {
 			try {
 				fsResults = get4SQResults(query, ll);
@@ -118,7 +121,7 @@ public class UnchainedAPI {
 			}
 			combined.addAll(fsResults);
 		}
-		
+
 		if(useYelp) {
 			try {
 				yelpResults = getYelpResults(query, ll);
@@ -127,7 +130,7 @@ public class UnchainedAPI {
 			}
 			combined.addAll(yelpResults);
 		}
-		
+
 		if(useGp) {
 			try {
 				googleResults = getGooglePlacesResults(query, ll);
@@ -136,7 +139,7 @@ public class UnchainedAPI {
 			}
 			combined.addAll(googleResults);
 		}
-		
+
 		//remove any duplicates
 		combined = Util.removeDuplicatesManually(combined);
 		combined.trimToSize();
@@ -163,7 +166,7 @@ public class UnchainedAPI {
 		}
 		return chains;
 	}
-	
+
 	/**
 	 * Load chain restaurants from file as an ArrayList
 	 * @return ArrayList of chain restaurants
@@ -175,8 +178,8 @@ public class UnchainedAPI {
 		try {
 			File f = new File(path);
 			Util.updateChainsFile(f);
-			
-			
+
+
 			in = new FileInputStream(f);
 		} catch (FileNotFoundException e1) {
 			throw new UnchainedAPIException("Can't read list of chains");
@@ -192,7 +195,7 @@ public class UnchainedAPI {
 		}
 		return chains;
 	}
-	
+
 	/**
 	 * Remove all chains from the aggregated list of venues from Foursquare, Yelp, Google, etc.
 	 * @param allVenues aggregate list of venues
@@ -216,13 +219,13 @@ public class UnchainedAPI {
 					isChain = true;
 					break;
 				}
-				
+
 			}
 			if(!isChain) nonChains.add(venue);
 		}
 		return nonChains;
 	}
-	
+
 	/**
 	 * Get venue results from Foursquare V2
 	 * @param ll lat,lng
@@ -233,7 +236,7 @@ public class UnchainedAPI {
 		FoursquareAPI2 fsApi2 = new FoursquareAPI2(FOURSQUARE_KEY, FOURSQUARE_SECRET);
 		return fsApi2.getVenues(query, ll);
 	}
-	
+
 
 	/**
 	 * Get venue results from Yelp
@@ -256,7 +259,7 @@ public class UnchainedAPI {
 		GooglePlacesAPI gpApi = new GooglePlacesAPI(GOOGLE_API_KEY);
 		return gpApi.getVenues(query, ll);
 	}
-	
+
 
 	/**
 	 * Return if the API is using Foursquare to get data
@@ -281,7 +284,7 @@ public class UnchainedAPI {
 	public boolean isUsingGp() {
 		return useGp;
 	}
-	
+
 	/**
 	 * Set use status for Foursquare
 	 * @param use4sq
@@ -291,10 +294,10 @@ public class UnchainedAPI {
 		if(FOURSQUARE_KEY == null || FOURSQUARE_SECRET == null) {
 			this.use4sq = false;
 		}		
-		
+
 		this.use4sq = use4sq;
 	}
-	
+
 	/**
 	 * Set use status for Yelp
 	 * @param useYelp
@@ -304,7 +307,7 @@ public class UnchainedAPI {
 		if(YELP_KEY == null || YELP_SECRET == null || YELP_TOKEN == null || YELP_TOKEN_SECRET == null) {
 			this.useYelp = false;
 		}		
-		
+
 		this.useYelp = useYelp;
 	}
 
@@ -315,7 +318,7 @@ public class UnchainedAPI {
 	public void setUseGp(boolean useGp) {
 		this.useGp = (GOOGLE_API_KEY == null) ? false : useGp;
 	}
-	
+
 	/**
 	 * Set keys for Foursquare
 	 * @param key
@@ -326,7 +329,7 @@ public class UnchainedAPI {
 		this.FOURSQUARE_SECRET = secret;
 		setUse4sq(true);
 	}
-	
+
 	/**
 	 * Set keys for Yelp
 	 * @param key
@@ -341,7 +344,7 @@ public class UnchainedAPI {
 		YELP_TOKEN_SECRET = tokSec;
 		setUseYelp(true);
 	}
-	
+
 	/**
 	 * Set key for GP
 	 * @param key

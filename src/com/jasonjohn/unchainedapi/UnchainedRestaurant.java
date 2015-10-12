@@ -33,7 +33,7 @@ public class UnchainedRestaurant {
 	public String toString() {
 		String s = "Restaurant Info for: " + getName() + "\n";
 
-		s += getAddress() + "\n";
+		s += (getAddress() == null) ? "No address data for this venue\n" : getAddress() + "\n";
 		s += getWebsite() + "\n";
 		
 		if(getRating() == -1) 
@@ -58,9 +58,7 @@ public class UnchainedRestaurant {
 	}
 
 	public void setAddress(String address) {
-		if(address != null)
-			this.address = address;
-		else this.address = "No address data for this venue";
+		this.address = address;
 	}
 
 	public String getWebsite() {
@@ -71,7 +69,7 @@ public class UnchainedRestaurant {
 		if(website != null) 
 			this.website = website;
 		else
-			this.website = "Google Search: " + String.format("http://www.google.com/search?q=%s+%s",
+			this.website = String.format("http://www.google.com/search?q=%s+%s",
 					getName().replace(' ', '+'), getAddress().replace(' ', '+'));
 	}
 
@@ -111,6 +109,4 @@ public class UnchainedRestaurant {
 	public void setPicUrls(ArrayList<String> picUrls) {
 		this.picUrls = picUrls;
 	}
-
-	
 }
