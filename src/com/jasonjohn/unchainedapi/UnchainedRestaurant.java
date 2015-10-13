@@ -13,7 +13,7 @@ public class UnchainedRestaurant {
 	private String name, address, website;
 	private Double rating;
 	private ArrayList<String> picUrls;
-	
+
 	/**
 	 * Constructor that fills out all venue data
 	 * @param name Name of Venue
@@ -35,13 +35,14 @@ public class UnchainedRestaurant {
 
 		s += (getAddress() == null) ? "No address data for this venue\n" : getAddress() + "\n";
 		s += getWebsite() + "\n";
-		
+
 		if(getRating() == -1) 
 			s+= "No rating data for this venue";
 		else
 			s += getRating() + "/5\n";
-		
-		s += "Pic: " + getPicUrls().get(0) + "\n";
+
+		if(getPicUrls() != null)
+			s += "Pic: " + getPicUrls().get(0) + "\n";
 		return s;
 	}
 
@@ -69,8 +70,13 @@ public class UnchainedRestaurant {
 		if(website != null) 
 			this.website = website;
 		else
-			this.website = String.format("http://www.google.com/search?q=%s+%s",
-					getName().replace(' ', '+'), getAddress().replace(' ', '+'));
+			if(this.address != null) {
+				this.website = String.format("http://www.google.com/search?q=%s+%s",
+						getName().replace(' ', '+'), getAddress().replace(' ', '+'));
+			} else {
+				this.website = String.format("http://www.google.com/search?q=%s",
+						getName().replace(' ', '+'));
+			}
 	}
 
 
@@ -95,7 +101,7 @@ public class UnchainedRestaurant {
 
 		name1 = Util.normalizeVenueName(name1);
 		name2 = Util.normalizeVenueName(name2);
-		
+
 		if(name1.contains(name2) || name2.contains(name1)) {
 			return true;
 		} else return false;

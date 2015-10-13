@@ -21,12 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pablo127.almonds.GetCallback;
-import pablo127.almonds.Parse;
-import pablo127.almonds.ParseException;
-import pablo127.almonds.ParseObject;
-import pablo127.almonds.ParseQuery;
-
 /**
  * Utility class for various helpful functions
  * @author Jason John
@@ -177,25 +171,7 @@ public class Util {
 	 * @param path the path to the chains file
 	 */
 	public static void updateChainsFile(File file) {
-		long fileTime = file.lastModified();
-		long currentTime = System.currentTimeMillis();
-		if((currentTime - fileTime) < 8.64e7) {
-			System.out.println("Need new file from Parse...");
-			//time to do parse stuff
-			Parse.initialize(PARSE_APP_ID, PARSE_REST_ID);
-			ParseQuery query = new ParseQuery("Chains");
-			query.getInBackground("03plzIDDms", new GetCallback() {
-				@Override
-				public void done(ParseObject obj) {
-					if (obj != null) {
-						System.out.println("SUCCESS");
-						
-					} else {
-						System.out.println("FAIL");
-					}
-				}
-			});
-		}
+		
 	}
 	
 	/**

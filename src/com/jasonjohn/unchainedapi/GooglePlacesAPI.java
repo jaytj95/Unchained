@@ -15,14 +15,14 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 	 * Google Places search endpoint
 	 */
 	public static final String GOOGLE_PLACES_ENDPOINT = 
-			"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=5000&types=food%s&key=%s";
+			"https://maps.googleapis.com/maps/api/place/textsearch/json?location=%s&radius=2000%s&key=%s";
 	public static final String GOOGLE_PHOTO_ENDPOINT =
-			"https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=%s&key=%s";
+			"https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=%s&key=%s";
 	/**
 	 * Google Key
 	 */
 	private String GOOGLE_KEY;
-	
+
 	/**
 	 * Constructor that takes in the API key for Google Places
 	 * @param key API Key
@@ -53,22 +53,18 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 				for(int i = 0; i < array.length(); i++) {
 					JSONObject gVenue = array.getJSONObject(i);
 					String name = gVenue.getString("name");
-					String address = (gVenue.has("vicinity")) ? gVenue.getString("vicinity") : null;
+					String address = (gVenue.has("formatted_address")) ? gVenue.getString("formatted_address") : null;
 					String website = null; //no website data...let superclass handle google search url
 					double rating = (gVenue.has("rating")) ? gVenue.getDouble("rating") : -1;
-					String refId = null;
-					if(gVenue.getJSONArray("photos").length() > 0) {
-						refId = (gVenue.getJSONArray("photos").getJSONObject(0).has("photo_reference")) ? gVenue.getString("photo_reference") : null;
+					String photoRef = null;
+					try {
+						photoRef = gVenue.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
+					} catch(JSONException e) {
+						
 					}
-					
-					
-					ArrayList<String> picUrls = new ArrayList<>();
-					if(refId != null) {
-						String pic = getPicUrl(refId);
-						picUrls.add(pic);
-					}
-					
-					venues.add(new UnchainedRestaurant(name, address, website, rating, picUrls));
+					ArrayList<String> photoURLs = new ArrayList<>();
+					photoURLs.add(getPicUrl(photoRef));
+					venues.add(new UnchainedRestaurant(name, address, website, rating, photoURLs));
 				}
 			} else {
 				throw new UnchainedAPIException("Error getting GP venues");
@@ -76,14 +72,14 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 		} catch (JSONException e) {
 			throw new UnchainedAPIException("Error getting GP venues");
 		}
-		
-		
+
+
 		return venues;
-		
+
 	}
 
 	private String getPicUrl(String refId) {
-		String url = String.format(GOOGLE_KEY, refId, GOOGLE_KEY);
+		String url = String.format(GOOGLE_PHOTO_ENDPOINT, refId, GOOGLE_KEY);
 		return url;
 	}
 }

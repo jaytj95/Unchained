@@ -87,7 +87,8 @@ public class UnchainedAPI {
 	public ArrayList<UnchainedRestaurant> getUnchainedRestaurants(String query, String ll, String path) throws UnchainedAPIException {
 		query = query.replaceAll(" ", "+");
 		//get list of chains from file
-		ArrayList<String> chains = loadChainRestaurantsList(path);
+		if(chains.isEmpty())
+			chains = loadChainRestaurantsList(path);
 		//get list of restaurants around me
 		ArrayList<UnchainedRestaurant> restaurantsAroundMe = getVenuesNearby(query, ll);
 		//return curat	ed list
