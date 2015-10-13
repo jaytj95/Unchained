@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -185,7 +186,40 @@ public class Util {
 		if (category.matches("(?i:.*food.*|.*restaurant.*|.*diner.*)")) {
 			return true;
 		}
-		System.out.println(category + " doesn't match");
 		return false;
+	}
+	
+	/**
+	 * Breaks down a UCR into a HashMap for easy portability
+	 * @param ucr Unchained Restaurant to be broken down
+	 * @return The HashMap form of the UCR
+	 */
+	public static HashMap<String, Object> breakdownUCR(UnchainedRestaurant ucr) {
+		HashMap<String, Object> hashMap = new HashMap<>();
+		hashMap.put("name", ucr.getName());
+		hashMap.put("address", ucr.getAddress());
+		hashMap.put("telephone", ucr.getTelephone());
+		hashMap.put("latlng", ucr.getLatlng());
+		hashMap.put("pricePoint", ucr.getPricePoint());
+		hashMap.put("picUrls", ucr.getPicUrls());
+		hashMap.put("rating", ucr.getRating());
+		hashMap.put("website", ucr.getWebsite());
+		
+		return hashMap;
+	}
+	
+	public static UnchainedRestaurant buildUCR(HashMap<String, Object> hashMap) {
+		UnchainedRestaurant ucr = null;
+		String name = (String) hashMap.get("name");
+		String address = (String) hashMap.get("address");
+		String telephone = (String) hashMap.get("telephone");
+		double[] latlng = (double[]) hashMap.get("latlng");
+		int pricePoint = (Integer) hashMap.get("pricePoint");
+		ArrayList<String> picURLs = (ArrayList<String>) hashMap.get("picUrls");
+		Double rating = (Double) hashMap.get("rating");
+		String website = (String) hashMap.get("website");
+		
+		ucr = new UnchainedRestaurant(name, address, website, rating, picURLs, telephone, latlng, pricePoint);
+		return ucr;
 	}
 }

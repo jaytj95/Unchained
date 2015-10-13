@@ -1,5 +1,6 @@
 package com.jasonjohn.unchainedapi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
