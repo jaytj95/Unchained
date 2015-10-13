@@ -62,45 +62,47 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 
 				for(int i = 0; i < items.length(); i++) {
 					JSONObject venue = items.getJSONObject(i).getJSONObject("venue");
-					String name = venue.getString("name");
-					String address, website;
-					double rating;
-					try {
-						//address building
-						address = venue.getJSONObject("location").getString("address") 
-								+ ", " + venue.getJSONObject("location").getString("city")
-								+ ", " + venue.getJSONObject("location").getString("state");
-					} catch(JSONException e) {
-						address = null;
-					}
+					if(Util.checkIfIsRestaurant(venue.getJSONArray("categories").getJSONObject(0).getString("name"))) {
+						String name = venue.getString("name");
+						String address, website;
+						double rating;
+						try {
+							//address building
+							address = venue.getJSONObject("location").getString("address") 
+									+ ", " + venue.getJSONObject("location").getString("city")
+									+ ", " + venue.getJSONObject("location").getString("state");
+						} catch(JSONException e) {
+							address = null;
+						}
 
-					try{
-						//website data in JSON actually brings you to COMPANY website, we want to navigate to Foursquare website
-						website = String.format("https://foursquare.com/v/%s/%s", name.replaceAll("[^a-zA-Z0-9]", "-"), 
-								venue.getString("id"));
-					} catch(JSONException e) {
-						website = null;
-					}
+						try{
+							//website data in JSON actually brings you to COMPANY website, we want to navigate to Foursquare website
+							website = String.format("https://foursquare.com/v/%s/%s", name.replaceAll("[^a-zA-Z0-9]", "-"), 
+									venue.getString("id"));
+						} catch(JSONException e) {
+							website = null;
+						}
 
-					try {
-						//we want ratings out of 5, not out of 10
-						rating = venue.getDouble("rating")/2;
-					} catch(JSONException e) {
-						rating = -1;
+						try {
+							//we want ratings out of 5, not out of 10
+							rating = venue.getDouble("rating")/2;
+						} catch(JSONException e) {
+							rating = -1;
+						}
+						
+						ArrayList<String> picUrls = new ArrayList<>();
+						try {
+							JSONObject jObj = venue.getJSONObject("photos").getJSONArray("groups").getJSONObject(0).getJSONArray("items")
+									.getJSONObject(0);
+							String pic = "https://irs2.4sqi.net/img/general/500x500" + jObj.getString("suffix");
+							picUrls.add(pic);
+						} catch (JSONException e) {
+							//eat it
+						}
+						//create an UnchainedRestaurant out of this and add it to the list of venues
+						Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(name, address, website, rating, picUrls);
+						venues.add(fsRestaurant);
 					}
-					
-					ArrayList<String> picUrls = new ArrayList<>();
-					try {
-						JSONObject jObj = venue.getJSONObject("photos").getJSONArray("groups").getJSONObject(0).getJSONArray("items")
-								.getJSONObject(0);
-						String pic = "https://irs2.4sqi.net/img/general/500x500" + jObj.getString("suffix");
-						picUrls.add(pic);
-					} catch (JSONException e) {
-						//eat it
-					}
-					//create an UnchainedRestaurant out of this and add it to the list of venues
-					Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(name, address, website, rating, picUrls);
-					venues.add(fsRestaurant);
 				}
 
 			} else {

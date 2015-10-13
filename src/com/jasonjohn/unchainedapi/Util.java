@@ -197,4 +197,18 @@ public class Util {
 			});
 		}
 	}
+	
+	/**
+	 * I had some issues on some searches where I would get gas stations, realtor offices,
+	 * etc. Hopefully this function will help resolve that. Checks a category string
+	 * to see if it's related to food (restaurant, food, diner, etc.) 
+	 * @param category The category of the venue
+	 * @return if it's a food place or not
+	 */
+	public static boolean checkIfIsRestaurant(String category) {
+		if (category.matches("(?i:.*food.*|.*restaurant.*|.*diner.*)")) {
+			return true;
+		}
+		return false;
+	}
 }
