@@ -51,20 +51,32 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 				//bunch of JSON sifting to get what we want
 				JSONArray array = googleResponse.getJSONArray("results");
 				for(int i = 0; i < array.length(); i++) {
+					boolean isFoodPlace = false;
 					JSONObject gVenue = array.getJSONObject(i);
-					String name = gVenue.getString("name");
-					String address = (gVenue.has("formatted_address")) ? gVenue.getString("formatted_address") : null;
-					String website = null; //no website data...let superclass handle google search url
-					double rating = (gVenue.has("rating")) ? gVenue.getDouble("rating") : -1;
-					String photoRef = null;
-					try {
-						photoRef = gVenue.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
-					} catch(JSONException e) {
-						
+
+					JSONArray types = gVenue.getJSONArray("types");
+					for(int x = 0; x < types.length(); x++) {
+						if(Util.checkIfIsRestaurant(types.getString(x))) {
+							isFoodPlace = true;
+							break;
+						}
 					}
-					ArrayList<String> photoURLs = new ArrayList<>();
-					photoURLs.add(getPicUrl(photoRef));
-					venues.add(new UnchainedRestaurant(name, address, website, rating, photoURLs));
+
+					if(isFoodPlace) {
+						String name = gVenue.getString("name");
+						String address = (gVenue.has("formatted_address")) ? gVenue.getString("formatted_address") : null;
+						String website = null; //no website data...let superclass handle google search url
+						double rating = (gVenue.has("rating")) ? gVenue.getDouble("rating") : -1;
+						String photoRef = null;
+						try {
+							photoRef = gVenue.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
+						} catch(JSONException e) {
+
+						}
+						ArrayList<String> photoURLs = new ArrayList<>();
+						photoURLs.add(getPicUrl(photoRef));
+						venues.add(new UnchainedRestaurant(name, address, website, rating, photoURLs));
+					}
 				}
 			} else {
 				throw new UnchainedAPIException("Error getting GP venues");

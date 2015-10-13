@@ -185,6 +185,7 @@ public class Util {
 		if (category.matches("(?i:.*food.*|.*restaurant.*|.*diner.*)")) {
 			return true;
 		}
+		System.out.println(category + " doesn't match");
 		return false;
 	}
 }
