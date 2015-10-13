@@ -50,6 +50,7 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		//format endpoint for key, secret, and lat/lng
 		String url = String.format(FS_SEARCH, FS_KEY, FS_SECRET, ll, query);
+		System.out.println(url);
 		JSONObject fsResponse = Util.getJsonFromUrl(url);
 		try {
 			//if meta code returns successful
@@ -64,8 +65,11 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 					JSONObject venue = items.getJSONObject(i).getJSONObject("venue");
 					if(Util.checkIfIsRestaurant(venue.getJSONArray("categories").getJSONObject(0).getString("name"))) {
 						String name = venue.getString("name");
-						String address, website;
+						String address, website, telephone = null;
 						double rating;
+						double[] latlng = new double[]{0,0};
+						int pricePoint = 0;
+						
 						try {
 							//address building
 							address = venue.getJSONObject("location").getString("address") 
@@ -99,8 +103,33 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 						} catch (JSONException e) {
 							//eat it
 						}
+						
+						//phone
+						try {
+							telephone = (venue.has("contact")) ? venue.getJSONObject("contact").getString("formattedPhone") : null;
+						} catch (JSONException e) {
+							
+						}
+						
+						//latlng
+						try{
+							if(venue.has("location")) {
+								JSONObject loc = venue.getJSONObject("location");
+								latlng = new double[]{loc.getDouble("lat"), loc.getDouble("lng")};
+							}
+						} catch(JSONException e) {
+							
+						}
+						
+						//price point
+						try {
+							pricePoint = venue.getJSONObject("price").getInt("tier");
+						} catch(JSONException e) {
+							
+						}
+						
 						//create an UnchainedRestaurant out of this and add it to the list of venues
-						Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(name, address, website, rating, picUrls);
+						Unchained4SQRestaurant fsRestaurant = new Unchained4SQRestaurant(name, address, website, rating, picUrls, telephone, latlng, pricePoint);
 						venues.add(fsRestaurant);
 					}
 				}

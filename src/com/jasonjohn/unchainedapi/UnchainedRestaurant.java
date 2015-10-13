@@ -10,9 +10,35 @@ import java.util.ArrayList;
 public class UnchainedRestaurant {
 
 	/** Various venue information */
-	private String name, address, website;
+	private String name, address, website, telephone;
 	private Double rating;
 	private ArrayList<String> picUrls;
+	private double[] latlng;
+	private int pricePoint;
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public double[] getLatlng() {
+		return latlng;
+	}
+
+	public void setLatlng(double[] latlng) {
+		this.latlng = latlng;
+	}
+
+	public int getPricePoint() {
+		return pricePoint;
+	}
+
+	public void setPricePoint(int pricePoint) {
+		this.pricePoint = pricePoint;
+	}
 
 	/**
 	 * Constructor that fills out all venue data
@@ -21,12 +47,16 @@ public class UnchainedRestaurant {
 	 * @param website Venue website (on review site, not actual company website)
 	 * @param rating Rating out of 5 stars
 	 */
-	public UnchainedRestaurant(String name, String address, String website, Double rating, ArrayList<String> pics) {
+	public UnchainedRestaurant(String name, String address, String website, Double rating, ArrayList<String> pics, 
+			String telephone, double[] ll, int pricePoint) {
 		setName(name);
 		setAddress(address);
 		setWebsite(website);
 		setRating(rating);
 		setPicUrls(pics);
+		setTelephone(telephone);
+		setLatlng(ll);
+		setPricePoint(pricePoint);
 	}
 
 	@Override

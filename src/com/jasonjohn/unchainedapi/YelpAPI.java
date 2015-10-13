@@ -138,6 +138,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 
 				JSONObject location = (JSONObject) restaurant.get("location");
 				String address = null;
+				double[] latlng = new double[]{0,0};
 				if(location != null) {
 					JSONArray addrArray = (JSONArray) location.get("address");
 					address = (String) addrArray.get(0);
@@ -146,6 +147,9 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 						address += ", " + (String) location.get("state_code");
 						address += ", " + (String) location.get("postal_code");
 					}
+					
+					JSONObject coord = (JSONObject) location.get("coordinate");
+					latlng = new double[]{(Double)coord.get("latitude"), (Double)coord.get("longitude")};
 				}
 
 
@@ -157,8 +161,9 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 				if(pic != null) {
 					picUrls.add(pic);
 				}
-				
-				UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating, picUrls);
+				String phone = null;
+				phone = (String) restaurant.get("display_phone");
+				UnchainedYelpRestaurant yelpRestaurant = new UnchainedYelpRestaurant(name, address, website, rating, picUrls, phone, latlng, 2);
 				list.add(yelpRestaurant);
 			}
 		} catch (Exception e) {

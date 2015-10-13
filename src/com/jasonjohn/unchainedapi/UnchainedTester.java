@@ -29,8 +29,8 @@ public class UnchainedTester {
 			String query = choice;
 			@Override
 			public void run() {
-				unchainedApi.setUse4sq(false);
-				unchainedApi.setUseYelp(false);
+//				unchainedApi.setUse4sq(false);
+//				unchainedApi.setUseYelp(false);
 //				unchainedApi.setUseGp(false);
 				System.out.printf("API STATUS:\nFoursquare: %b\tYelp: %b\tGoogle: %b\n\n", 
 						unchainedApi.isUsing4sq(), unchainedApi.isUsingYelp(), unchainedApi.isUsingGp());

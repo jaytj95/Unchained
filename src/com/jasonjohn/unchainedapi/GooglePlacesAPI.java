@@ -43,7 +43,6 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		//format endpoint for key, secret, and lat/lng
 		String url = String.format(GOOGLE_PLACES_ENDPOINT, ll, query, GOOGLE_KEY);
-		System.out.println(url);
 		JSONObject googleResponse = Util.getJsonFromUrl(url);
 		try {
 			//if meta code returns successful
@@ -71,11 +70,16 @@ public class GooglePlacesAPI extends ThirdPartyVenueAPI {
 						try {
 							photoRef = gVenue.getJSONArray("photos").getJSONObject(0).getString("photo_reference");
 						} catch(JSONException e) {
-
+						}
+						int pricePoint = (gVenue.has("price_level")) ? gVenue.getInt("price_level") : 0;
+						double[] latlng = new double[]{0,0};
+						if(gVenue.has("geometry")) {
+							JSONObject geo = gVenue.getJSONObject("geometry");
+							latlng = new double[]{geo.getDouble("lat"), geo.getDouble("lng")};
 						}
 						ArrayList<String> photoURLs = new ArrayList<>();
 						photoURLs.add(getPicUrl(photoRef));
-						venues.add(new UnchainedRestaurant(name, address, website, rating, photoURLs));
+						venues.add(new UnchainedRestaurant(name, address, website, rating, photoURLs, null, latlng, pricePoint));
 					}
 				}
 			} else {
