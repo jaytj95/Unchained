@@ -44,7 +44,6 @@ public class UnchainedTester {
 				}
 				try {
 					System.out.println("Finding venues...");
-					String path = "C:\\Users\\jtjohn\\Desktop\\chains.txt";
 					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query, location);
 					
 					for(UnchainedRestaurant v : nonChains) {

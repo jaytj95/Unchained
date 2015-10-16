@@ -121,6 +121,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 		query = (query == null || query.equals("")) ? "restaurant" : query;
 		ArrayList<UnchainedRestaurant> list = new ArrayList<>();
 		String searchResponseJSON = searchForBusinessesByLL(query, ll);
+		System.out.println(searchResponseJSON);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
 		try {
@@ -159,6 +160,8 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 				ArrayList<String> picUrls = new ArrayList<>();
 				String pic = (String) restaurant.get("image_url");
 				if(pic != null) {
+					pic = pic.replace("ms.jpg", "o.jpg");
+					System.out.println(pic);
 					picUrls.add(pic);
 				}
 				String phone = null;

@@ -50,7 +50,6 @@ public class FoursquareAPI2 extends ThirdPartyVenueAPI {
 		ArrayList<UnchainedRestaurant> venues = new ArrayList<>();
 		//format endpoint for key, secret, and lat/lng
 		String url = String.format(FS_SEARCH, FS_KEY, FS_SECRET, ll, query);
-		System.out.println(url);
 		JSONObject fsResponse = Util.getJsonFromUrl(url);
 		try {
 			//if meta code returns successful
