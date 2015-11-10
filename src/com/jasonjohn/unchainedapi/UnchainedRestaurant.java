@@ -72,7 +72,7 @@ public class UnchainedRestaurant {
 		else
 			s += getRating() + "/5\n";
 
-		if(getPicUrls() != null)
+		if(getPicUrls() != null && !getPicUrls().isEmpty())
 			s += "Pic: " + getPicUrls().get(0) + "\n";
 		return s;
 	}

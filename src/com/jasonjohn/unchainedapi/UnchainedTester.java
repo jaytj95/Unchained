@@ -47,7 +47,14 @@ public class UnchainedTester {
 					ArrayList<UnchainedRestaurant> nonChains = unchainedApi.getUnchainedRestaurants(query, location);
 					
 					for(UnchainedRestaurant v : nonChains) {
-						System.out.println(nonChains.indexOf(v) + 1 + ". " + v.getName());
+						System.out.print(nonChains.indexOf(v) + 1 + ". " + v.getName() + "\t");
+						if(v instanceof Unchained4SQRestaurant) {
+							System.out.println("FS");
+						} else if (v instanceof UnchainedYelpRestaurant) {
+							System.out.println("YELP");
+						} else {
+							System.out.println("GP");
+						}
 					}
 					System.out.println("\nWe found " + nonChains.size() + " non-chain(s)\n");
 

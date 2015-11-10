@@ -29,6 +29,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 	private static final int SEARCH_LIMIT = 20; //MAX
 	private static final String SEARCH_PATH = "/v2/search";
 	private static final String BUSINESS_PATH = "/v2/business";
+	private static final String CATEGORY_FILTER = "food";
 
 	OAuthService service;
 	Token accessToken;
@@ -63,6 +64,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 		request.addQuerystringParameter("term", term);
 		request.addQuerystringParameter("location", location);
 		request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+		request.addQuerystringParameter("category_filter", CATEGORY_FILTER);
 		return sendRequestAndGetResponse(request);
 	}
 	private String searchForBusinessesByLL(String term, String ll) {
@@ -70,6 +72,7 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 		request.addQuerystringParameter("term", term);
 		request.addQuerystringParameter("ll", ll);
 		request.addQuerystringParameter("limit", String.valueOf(SEARCH_LIMIT));
+		request.addQuerystringParameter("category_filter", CATEGORY_FILTER);
 		return sendRequestAndGetResponse(request);
 	}
 
@@ -121,7 +124,6 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 		query = (query == null || query.equals("")) ? "restaurant" : query;
 		ArrayList<UnchainedRestaurant> list = new ArrayList<>();
 		String searchResponseJSON = searchForBusinessesByLL(query, ll);
-		System.out.println(searchResponseJSON);
 		JSONParser parser = new JSONParser();
 		JSONObject response = null;
 		try {
@@ -161,7 +163,6 @@ public class YelpAPI extends ThirdPartyVenueAPI {
 				String pic = (String) restaurant.get("image_url");
 				if(pic != null) {
 					pic = pic.replace("ms.jpg", "o.jpg");
-					System.out.println(pic);
 					picUrls.add(pic);
 				}
 				String phone = null;
